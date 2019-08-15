@@ -1,0 +1,8 @@
+{
+  "_removeNodes": [
+    "//script",
+    "//style"
+  ],	
+	"calculation": "//span[contains(@class, 'speed')]",
+	"status":  "//ul[contains(@class, 'work-status')]"
+}

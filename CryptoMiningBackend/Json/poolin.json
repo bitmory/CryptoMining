@@ -1,0 +1,7 @@
+{
+  "_removeNodes": [
+    "//script",
+    "//style"
+  ],	
+	"data": "//p[contains(@class, 'f-tac')]"
+}

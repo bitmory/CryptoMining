@@ -1,0 +1,9 @@
+{
+  "_removeNodes": [
+    "//script",
+    "//style"
+  ],
+  "data": "//div[contains(@class, 'status-bar')]//span[contains(@class, 'item-val')]",
+  "currenthash": "//tr[@id='head-row-total']//td[contains(@class, 'hash-15m')]",
+  "dailyhash": "//tr[@id='head-row-total']//td[contains(@class, 'hash-24h')]"
+}

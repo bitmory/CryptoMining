@@ -1,0 +1,9 @@
+{
+  "_removeNodes": [
+    "//script",
+    "//style"
+  ],	
+	"data": "//ul[contains(@class, 'observer-top-hash')]//li//div[contains(@class, 'f30')]"
+}
+
+	

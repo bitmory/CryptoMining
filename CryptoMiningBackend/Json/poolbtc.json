@@ -1,0 +1,8 @@
+{
+  "_removeNodes": [
+    "//script",
+    "//style"
+  ],
+  "calculation": "//div[contains(@class, 'dashInfo')]//div[contains(@class, 'db-left')]//div[contains(@class, 'db-body')]//div[contains(@class, 'v')]",
+  "status": "//div[contains(@class, 'dashInfo')]//div[contains(@class, 'db-middle')]//div[contains(@class, 'db-body')]//div[contains(@class, 'v')]"
+}
