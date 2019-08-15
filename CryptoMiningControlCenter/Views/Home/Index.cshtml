@@ -1,0 +1,73 @@
+﻿@model IEnumerable<CryptoMiningControlCenter.Models.Repository.EFCore.Miner>
+
+@{
+    ViewData["Title"] = "矿机在线状态监控";
+}
+
+<div class="text-center">
+    <h1 class="display-4">矿机在线状态监控</h1>
+</div>
+
+
+
+<table class="table table-bordered row">
+    <thead class="w-100">
+        <tr class="row mx-0 bg-primary">
+            <th class="col-1">
+                客户名
+            </th>
+            <th class="col-1">
+                机器型号
+            </th>
+            <th class="col-1">
+                场地
+            </th>
+            <th class="col-5">
+                观察者链接
+            </th>
+            <th class="col-1">
+                在线台数
+            </th>
+            <th class="col-1">
+                离线台数
+            </th>
+            <th class="col-1">
+                15分钟算力
+            </th>
+            <th class="col-1">
+                24小时算力
+            </th>
+        </tr>
+    </thead>
+    <tbody class="w-100">
+        @foreach (var item in Model)
+        {
+        <tr class="row mx-0">
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Minertype)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td class="col-5" style="word-break:break-all; word-wrap:break-word;">
+                @Html.DisplayFor(modelItem => item.Link)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Active)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Inactive)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Currentcalculation)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Dailycalculation)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,87 @@
+﻿@model PaginatedList<CryptoMiningControlCenter.Models.Repository.EFCore.Worker>
+
+@{
+    ViewData["Title"] = "矿机列表";
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                矿池编号
+            </th>
+            <th>
+                机器名
+            </th>
+            <th>
+                当前hashrate
+            </th>
+            <th>
+                24小时hashrate
+            </th>
+            <th>
+                是否active
+            </th>
+            <th>
+                Rejected
+            </th>
+            <th>
+                更新时间
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Poolid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Workername)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Currenthashrate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dailyhashrate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Isactive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rejected)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Updateat)
+                </td>
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |*@
+                    @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    上一页
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    下一页
+</a>

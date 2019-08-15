@@ -1,0 +1,63 @@
+﻿@model CryptoMiningControlCenter.Models.Repository.EFCore.Worker
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Worker</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Poolid" class="control-label"></label>
+                <input asp-for="Poolid" class="form-control" />
+                <span asp-validation-for="Poolid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Workername" class="control-label"></label>
+                <input asp-for="Workername" class="form-control" />
+                <span asp-validation-for="Workername" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Currenthashrate" class="control-label"></label>
+                <input asp-for="Currenthashrate" class="form-control" />
+                <span asp-validation-for="Currenthashrate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Dailyhashrate" class="control-label"></label>
+                <input asp-for="Dailyhashrate" class="form-control" />
+                <span asp-validation-for="Dailyhashrate" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Isactive" /> @Html.DisplayNameFor(model => model.Isactive)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rejected" class="control-label"></label>
+                <input asp-for="Rejected" class="form-control" />
+                <span asp-validation-for="Rejected" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Updateat" class="control-label"></label>
+                <input asp-for="Updateat" class="form-control" />
+                <span asp-validation-for="Updateat" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
