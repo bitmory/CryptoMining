@@ -36,8 +36,11 @@ namespace CryptoMiningBackend
             //WorkerSummary4(11);
             //WorkerSummary5(25);
             //Worker2(5);
-
+            //ProcessPool("f2pool");
+            //ProcessPool("poolin");
             //ProcessPool("poolbtc");
+            //ProcessPool("huobi");
+            //ProcessPool("antpool");
             ProcessAll();
         }
 
@@ -186,6 +189,7 @@ namespace CryptoMiningBackend
 
             Thread.Sleep(2000);
             var source = driver.PageSource;
+            driver.Close();
             driver.Quit();
             var openScraping = new StructuredDataExtractor(config);
             var scrapingResults = openScraping.Extract(source);
@@ -193,9 +197,9 @@ namespace CryptoMiningBackend
             JObject jObject = JObject.Parse(scrapingResults.ToString());
             JToken json = jObject["data"];
 
-            var all = (int)json[0];
+            //var all = (int)json[0];
             var active = (int)json[1];
-            var inactive = all - active;
+            var inactive = (int)json[2];
 
 
             JToken json2 = jObject["currenthash"];
@@ -216,10 +220,11 @@ namespace CryptoMiningBackend
             //driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(20);
             driver.Navigate().GoToUrl(url);
 
-            Thread.Sleep(5000);
+            Thread.Sleep(8000);
             //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
             //wait.Until(dr => dr.FindElement(By.XPath("//p[contains(@class, 'f-tac')]")));
             var source = driver.PageSource;
+            driver.Close();
             driver.Quit();
             var openScraping = new StructuredDataExtractor(config);
             var scrapingResults = openScraping.Extract(source);
@@ -229,7 +234,7 @@ namespace CryptoMiningBackend
             JToken json = jObject["data"];
             var currentcalculation = (string)json[0];
             var dailycalculation = (string)json[1];
-            var active = 0;
+            int active;
             var inactive = 0;
             if ((string)json[2] == "-")
             {
@@ -262,6 +267,7 @@ namespace CryptoMiningBackend
 
             Thread.Sleep(2000);
             var source = driver.PageSource;
+            driver.Close();
             driver.Quit();
             var openScraping = new StructuredDataExtractor(config);
             var scrapingResults = openScraping.Extract(source);
@@ -289,6 +295,7 @@ namespace CryptoMiningBackend
             driver.Navigate().GoToUrl(url);
             Thread.Sleep(2000);
             var source = driver.PageSource;
+            driver.Close();
             driver.Quit();
             var openScraping = new StructuredDataExtractor(config);
             var scrapingResults = openScraping.Extract(source);
@@ -325,10 +332,7 @@ namespace CryptoMiningBackend
 
             int active = Int32.Parse(numbers[1]);
             int inactive = Int32.Parse(numbers[2]);
-            int dead = Int32.Parse(numbers[3]);
-
-            // add together
-            inactive = inactive + dead;
+            //int dead = Int32.Parse(numbers[3]);
 
             UpdateSummary(currentcalculation, dailycalculation, active, inactive, poolid);
         }
@@ -344,6 +348,7 @@ namespace CryptoMiningBackend
 
             Thread.Sleep(2000);
             var source = driver.PageSource;
+            driver.Close();
             driver.Quit();
             var openScraping = new StructuredDataExtractor(config);
             var scrapingResults = openScraping.Extract(source);
@@ -384,6 +389,9 @@ namespace CryptoMiningBackend
             driver.Navigate().GoToUrl(url);
             //IWebElement element = driver.FindElement(By.XPath("//table"));
             var source = driver.PageSource;
+
+            driver.Close();
+            driver.Quit();
 
             var openScraping = new StructuredDataExtractor(config);
             var scrapingResults = openScraping.Extract(source);
@@ -472,7 +480,7 @@ namespace CryptoMiningBackend
         {
             string query = @"Insert into worker values (@poolid , @workername, @currenthashrate , @dailyhashrate , @isactive, @rejected, @updateat);
             select Cast(Scope_Identity() as int)";
-            int id = db.Query<int>(query, worker).Single();
+            db.Query<int>(query, worker).Single();
             //worker.Id = id;
             //return worker;
         }
