@@ -174,7 +174,6 @@ namespace CryptoMiningBackend
                 //    item.dailyhash, item.rejected);
             }
 
-
             //Console.ReadKey();
         }
 
@@ -187,7 +186,7 @@ namespace CryptoMiningBackend
             var driver = new ChromeDriver();
             driver.Navigate().GoToUrl(url);
 
-            Thread.Sleep(2000);
+            //Thread.Sleep(2000);
             var source = driver.PageSource;
             driver.Close();
             driver.Quit();
@@ -495,7 +494,8 @@ namespace CryptoMiningBackend
 
         public static void UpdateSummary(string currentcalculation, string dailycalculation, int active, int inactive, int poolid)
         {
-            string query = "update miner set currentcalculation = '" + currentcalculation + "' , dailycalculation = '" + dailycalculation + "', active = '" + active + "', inactive = '" + inactive + "' where id = '" + poolid + "' ";
+            string date = DateTime.Now.ToString();
+            string query = "update miner set currentcalculation = '" + currentcalculation + "' , dailycalculation = '" + dailycalculation + "', active = '" + active + "', inactive = '" + inactive + "', updatedate = '"+ date +"' where id = '" + poolid + "' ";
             db.Execute(query);
             //string query = "update miner set currentcalculation = '" + worker.currentcalculation + "' , dailycalculation = '" + worker.dailycalculation + "' where id = '" + worker.poolid + "' ";
             //db.Execute(query);
