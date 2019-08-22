@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CryptoMiningControlCenter.Models.Repository.EFCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace CryptoMiningControlCenter.Controllers
 {
@@ -21,7 +23,24 @@ namespace CryptoMiningControlCenter.Controllers
         // GET: AdminController
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Miner.ToListAsync());
+            var username = HttpContext.Session.GetString("username");
+            if (username == null)
+            {
+                return RedirectToAction("Index","Account");
+            }
+            else
+            {
+                var user = await _context.Login.Where(x => x.Username == username).FirstOrDefaultAsync();
+                if(user.Role == "admin")
+                {
+                    return View(await _context.Miner.ToListAsync());
+                }
+                else
+                {
+                    ViewBag.error = "你没有权限";
+                    return View("Authorize");
+                }
+            }
         }
 
         // GET: AdminController/Details/5

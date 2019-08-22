@@ -1,5 +1,6 @@
-﻿@using Microsoft.AspNetCore.Http;
-@model IEnumerable<CryptoMiningControlCenter.Models.Repository.EFCore.Miner>
+﻿@model IEnumerable<CryptoMiningControlCenter.Models.Repository.EFCore.Miner>
+@using Microsoft.AspNetCore.Http;
+
 
 @{
     ViewData["Title"] = "矿机在线状态监控";
@@ -9,8 +10,21 @@
     <h1 class="display-4">矿机在线状态监控</h1>
 </div>
 
-<h3>欢迎你！ @Context.Session.GetString("username")</h3> 
-@*<a asp-controller="account" asp-action="logout">登出账号</a>*@
+<h4>欢迎你! @Context.Session.GetString("username")</h4>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            选择场地位置: <select type="text" name="SearchString" value="@ViewData["currentFilter"]">
+                <option value="普洱">普洱</option>
+                <option value="新马">新马</option>
+            </select>
+            <input type="submit" value="确定" class="btn btn-default" />
+
+            <a asp-action="Index">返回所有列表</a>
+        </p>
+    </div>
+</form>
 
 <table class="table table-bordered row">
     <thead class="w-100">
@@ -33,43 +47,55 @@
             <th class="col-1">
                 无效台数
             </th>
-            <th class="col-2">
+            <th class="col-1">
                 15分钟算力
             </th>
-            <th class="col-2">
+            <th class="col-1">
                 24小时算力
+            </th>
+            <th class="col-1">
+                平均算力
+            </th>
+            <th class="col-1">
+                数据达标率
             </th>
         </tr>
     </thead>
     <tbody class="w-100">
         @foreach (var item in Model)
         {
-        <tr class="row mx-0">
-            <td class="col-2">
-                <a href="@item.Link">@Html.DisplayFor(modelItem => item.Username)</a>     
-            </td>
-            <td class="col-2">
-                @Html.DisplayFor(modelItem => item.Minertype)
-            </td>
-            <td class="col-1">
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td class="col-1">
-                @Html.DisplayFor(modelItem => item.Active)
-            </td>
-            <td class="col-1">
-                @Html.DisplayFor(modelItem => item.Inactive)
-            </td>
-            <td class="col-1">
-                @Html.DisplayFor(modelItem => item.Dead)
-            </td>
-            <td class="col-2">
-                @Html.DisplayFor(modelItem => item.Currentcalculation)
-            </td>
-            <td class="col-2">
-                @Html.DisplayFor(modelItem => item.Dailycalculation)
-            </td>
-        </tr>
+            <tr class="row mx-0">
+                <td class="col-2">
+                    <a href="@item.Link">@Html.DisplayFor(modelItem => item.Username)</a>
+                </td>
+                <td class="col-2">
+                    @Html.DisplayFor(modelItem => item.Minertype)
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.Active)
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.Inactive)
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.Dead)
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.Currentcalculation)
+                </td>
+                <td class="col-1">
+                    @Html.DisplayFor(modelItem => item.Dailycalculation)
+                </td>
+                <td class="col-1">
+                    @(Convert.ToSingle(item.Currentcalculation / item.Active))
+                </td>
+                <td class="col-1">
+                    @(Convert.ToSingle((item.Currentcalculation / item.Active) / item.Standardcalculation))
+                </td>
+            </tr>
         }
     </tbody>
 </table>

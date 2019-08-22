@@ -29,13 +29,12 @@ namespace CryptoMiningControlCenter
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSession();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             var connection = @"Server=212.64.64.36,8989;uid=mineradmin;pwd=miner123;database=CryptoMining;ConnectRetryCount=0";
             services.AddDbContext<CryptoMiningContext>(options => options.UseSqlServer(connection));
         }
@@ -64,8 +63,8 @@ namespace CryptoMiningControlCenter
             {
                 routes.MapRoute(
                     name: "default",
-                    //template: "{controller=Account}/{action=Index}/{id?}");
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Account}/{action=Index}/{id?}");
+                    //template: "{controller=Home}/{action=Index}/{id?}");
         });
         }
     }

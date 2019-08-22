@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using CryptoMiningControlCenter.Models;
 using CryptoMiningControlCenter.Models.Repository.EFCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 
 namespace CryptoMiningControlCenter.Controllers
 {
@@ -22,6 +23,12 @@ namespace CryptoMiningControlCenter.Controllers
         // GET: Workers
         public async Task<IActionResult> Index(string searchString)
         {
+            var username = HttpContext.Session.GetString("username");
+            if(username == null)
+            {
+                return RedirectToAction("Index", "Account");
+            }
+
             var miners = from s in _context.Miner select s;
             ViewData["CurrentFilter"] = searchString;
 

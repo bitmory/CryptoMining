@@ -19,8 +19,8 @@ namespace CryptoMiningControlCenter.Controllers
         }
 
         //[Route("")]
-        //[Route("index")]
-        //[Route("~/")]
+        [Route("index")]
+        [Route("~/")]
         public IActionResult Index()
         {
             return View();

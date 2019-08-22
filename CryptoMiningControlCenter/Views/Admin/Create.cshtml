@@ -27,7 +27,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="Pooltype" class="control-label">矿池类型</label>
-                <input asp-for="Pooltype" class="form-control" />
+                <select asp-for="Pooltype" class="form-control">
+                    <option value="f2pool">f2pool</option>
+                    <option value="poolin">poolin</option>
+                    <option value="poolbtc">poolbtc</option>
+                    <option value="huobi">huobi</option>
+                    <option value="antpool">antpool</option>
+                </select>
                 <span asp-validation-for="Pooltype" class="text-danger"></span>
             </div>
             <div class="form-group">
