@@ -35,8 +35,8 @@ namespace CryptoMiningControlCenter
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            var connection = @"Server=212.64.64.36,8989;uid=admin_pro;pwd=cnkj123456!;database=CryptoMining;ConnectRetryCount=0";
+            services.AddSession();
+            var connection = @"Server=212.64.64.36,8989;uid=mineradmin;pwd=miner123;database=CryptoMining;ConnectRetryCount=0";
             services.AddDbContext<CryptoMiningContext>(options => options.UseSqlServer(connection));
         }
 
@@ -54,6 +54,8 @@ namespace CryptoMiningControlCenter
                 app.UseHsts();
             }
 
+            app.UseSession();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -62,8 +64,9 @@ namespace CryptoMiningControlCenter
             {
                 routes.MapRoute(
                     name: "default",
+                    //template: "{controller=Account}/{action=Index}/{id?}");
                     template: "{controller=Home}/{action=Index}/{id?}");
-            });
+        });
         }
     }
 }

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<CryptoMiningControlCenter.Models.Repository.EFCore.Miner>
+
+<p>
+    <a asp-action="Create">新添加场地观察者链接</a>
+</p>
+<table class="table table-bordered row">
+    <thead class="w-100">
+        <tr class="row mx-0 bg-primary">
+            <th class="col-1">
+                客户名
+            </th>
+            <th class="col-1">
+                机器型号
+            </th>
+            <th class="col-1">
+                场地
+            </th>
+            <th class="col-5">
+                观察者链接
+            </th>
+            <th class="col-1">
+                理论算力
+            </th>
+            <th class="col-3">
+                
+            </th>
+        </tr>
+    </thead>
+    <tbody  class="w-100">
+@foreach (var item in Model) {
+        <tr class="row mx-0">
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Minertype)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td class="col-5" style="word-break:break-all; word-wrap:break-word;">
+                @Html.DisplayFor(modelItem => item.Link)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Standardcalculation)
+            </td>
+            <td class="col-3">
+                <a asp-action="Edit" asp-route-id="@item.Id">编辑</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">详细</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">删除</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+

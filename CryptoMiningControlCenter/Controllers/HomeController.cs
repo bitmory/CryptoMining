@@ -20,11 +20,18 @@ namespace CryptoMiningControlCenter.Controllers
         }
 
         // GET: Workers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Miner.ToListAsync());
-        }
+            var miners = from s in _context.Miner select s;
+            ViewData["CurrentFilter"] = searchString;
 
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                miners = miners.Where(s => s.Location.Contains(searchString));
+            }
+
+            return View(await miners.AsNoTracking().ToListAsync());
+        }
 
         //public IActionResult Index()
         //{

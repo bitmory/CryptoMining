@@ -186,7 +186,7 @@ namespace CryptoMiningBackend
             var driver = new ChromeDriver();
             driver.Navigate().GoToUrl(url);
 
-            //Thread.Sleep(2000);
+            Thread.Sleep(1000);
             var source = driver.PageSource;
             driver.Close();
             driver.Quit();
@@ -199,14 +199,19 @@ namespace CryptoMiningBackend
             //var all = (int)json[0];
             var active = (int)json[1];
             var inactive = (int)json[2];
+            var dead = (int)json[3];
 
 
             JToken json2 = jObject["currenthash"];
             JToken json3 = jObject["dailyhash"];
-            var currentcalculation = (string)json2;
-            var dailycalculation = (string)json3;
+            var temp1 =  (string)json2;
+            var temp2 = (string)json3;
 
-            UpdateSummary(currentcalculation, dailycalculation, active, inactive, poolid);
+            var currentcalculation = GetFloat(temp1);
+            var dailycalculation = GetFloat(temp2);
+            var unit = GetString(temp1);
+
+            UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive,dead, poolid);
         }
 
         public static void WorkerSummary2(int poolid)
@@ -231,10 +236,17 @@ namespace CryptoMiningBackend
             //var jsonres = JsonConvert.DeserializeObject(scrapingResults.ToString());
             JObject jObject = JObject.Parse(scrapingResults.ToString());
             JToken json = jObject["data"];
-            var currentcalculation = (string)json[0];
-            var dailycalculation = (string)json[1];
-            int active;
-            var inactive = 0;
+            var temp1 = (string)json[0];
+            var temp2 = (string)json[1];
+
+            var currentcalculation = GetFloat(temp1);
+            var dailycalculation = GetFloat(temp2);
+            var unit = GetString(temp1);
+
+            int active,inactive;
+            int dead = 0;
+            // no data for dead
+
             if ((string)json[2] == "-")
             {
                 active = 0;
@@ -243,16 +255,17 @@ namespace CryptoMiningBackend
             {
                 active = (int)json[2];
             }
+
             if ((string)json[3] == "-")
             {
-                active = 0;
+                inactive = 0;
             }
             else
             {
                 inactive = (int)json[3];
             }
            
-            UpdateSummary(currentcalculation, dailycalculation, active, inactive, poolid);
+            UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
         }
 
         public static void WorkerSummary3(int poolid)
@@ -264,7 +277,7 @@ namespace CryptoMiningBackend
             var driver = new ChromeDriver();
             driver.Navigate().GoToUrl(url);
 
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
             var source = driver.PageSource;
             driver.Close();
             driver.Quit();
@@ -273,15 +286,21 @@ namespace CryptoMiningBackend
 
             JObject jObject = JObject.Parse(scrapingResults.ToString());
             JToken json = jObject["calculation"];
-            var currentcalculation = (string)json[0];
-            currentcalculation = currentcalculation.Replace(" ", "");
-            var dailycalculation = (string)json[1];
-            dailycalculation = dailycalculation.Replace(" ", "");
+            var currentcalculationtemp = (string)json[0];
+            var temp1 = currentcalculationtemp.Replace(" ", "");
+            var dailycalculationtemp = (string)json[1];
+            var temp2 = dailycalculationtemp.Replace(" ", "");
+
+            var currentcalculation = GetFloat(temp1);
+            var dailycalculation = GetFloat(temp2);
+            var unit = GetString(temp1);
+
             JToken json2 = jObject["status"];
             var active = (int)json2[1];
             var inactive = (int)json2[2];
+            int dead = 0;
 
-            UpdateSummary(currentcalculation, dailycalculation, active, inactive, poolid);
+            UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive,dead, poolid);
         }
 
         public static void WorkerSummary4(int poolid)
@@ -292,7 +311,7 @@ namespace CryptoMiningBackend
 
             var driver = new ChromeDriver();
             driver.Navigate().GoToUrl(url);
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
             var source = driver.PageSource;
             driver.Close();
             driver.Quit();
@@ -301,8 +320,13 @@ namespace CryptoMiningBackend
 
             JObject jObject = JObject.Parse(scrapingResults.ToString());
             JToken json = jObject["calculation"];
-            var currentcalculation = (string)json[0];
-            var dailycalculation = (string)json[2];
+            var temp1 = (string)json[0];
+            var temp2 = (string)json[2];
+
+            var currentcalculation = GetFloat(temp1);
+            var dailycalculation = GetFloat(temp2);
+            var unit = GetString(temp1);
+
             JToken json2 = jObject["status"];
 
             var temp = (string)json2;
@@ -331,9 +355,9 @@ namespace CryptoMiningBackend
 
             int active = Int32.Parse(numbers[1]);
             int inactive = Int32.Parse(numbers[2]);
-            //int dead = Int32.Parse(numbers[3]);
+            int dead = Int32.Parse(numbers[3]);
 
-            UpdateSummary(currentcalculation, dailycalculation, active, inactive, poolid);
+            UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
         }
 
         public static void WorkerSummary5(int poolid)
@@ -345,7 +369,7 @@ namespace CryptoMiningBackend
             var driver = new ChromeDriver();
             driver.Navigate().GoToUrl(url);
 
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
             var source = driver.PageSource;
             driver.Close();
             driver.Quit();
@@ -356,15 +380,20 @@ namespace CryptoMiningBackend
             JToken json = jObject["data"];
 
             var temp = (string)json[0];
-            var currentcalculation = (string)json[1];
-            var dailycalculation = (string)json[3];
+            var temp1 = (string)json[1];
+            var temp2 = (string)json[3];
+
+            var currentcalculation = GetFloat(temp1);
+            var dailycalculation = GetFloat(temp2);
+            var unit = GetString(temp1);
 
             var numbers = Regex.Split(temp.Trim(), @"\D+");
             var active = Int32.Parse(numbers[0]);
             var total = Int32.Parse(numbers[1]);
             var inactive = total - active;
+            int dead = 0;
 
-            UpdateSummary(currentcalculation, dailycalculation, active, inactive, poolid);
+            UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
         }
 
         public static void Worker2(int poolid)
@@ -492,10 +521,10 @@ namespace CryptoMiningBackend
             //return contact;
         }
 
-        public static void UpdateSummary(string currentcalculation, string dailycalculation, int active, int inactive, int poolid)
+        public static void UpdateSummary(float currentcalculation, float dailycalculation, string unit, int active, int inactive,int dead, int poolid)
         {
             string date = DateTime.Now.ToString();
-            string query = "update miner set currentcalculation = '" + currentcalculation + "' , dailycalculation = '" + dailycalculation + "', active = '" + active + "', inactive = '" + inactive + "', updatedate = '"+ date +"' where id = '" + poolid + "' ";
+            string query = "update miner set currentcalculation = '" + currentcalculation + "' , dailycalculation = '" + dailycalculation + "', unit = '"+ unit +"' , active = '" + active + "', inactive = '" + inactive + "', dead = '" + dead + "', updatedate = '" + date +"' where id = '" + poolid + "' ";
             db.Execute(query);
             //string query = "update miner set currentcalculation = '" + worker.currentcalculation + "' , dailycalculation = '" + worker.dailycalculation + "' where id = '" + worker.poolid + "' ";
             //db.Execute(query);
@@ -519,6 +548,32 @@ namespace CryptoMiningBackend
         {
             string query = "select id from miner where pooltype = '" + pooltype + "' ";
             return (List<int>)db.Query<int>(query);
+        }
+
+        public static float GetFloat(string s)
+        {
+            if (s == null || s == "")
+            {
+                return 0;
+            }
+            else
+            {
+                var floatres = Regex.Split(s, @"[^0-9\.]+");
+                return Convert.ToSingle(floatres[0]);
+            }
+        }
+
+        public static string GetString(string s)
+        {
+            if (s == null || s == "")
+            {
+                return "";
+            }
+            else
+            {
+                var nonNumeric = Regex.Replace(s, "[.0-9]", "");
+                return nonNumeric.Trim();
+            }
         }
 
     }

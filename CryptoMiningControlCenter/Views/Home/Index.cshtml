@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CryptoMiningControlCenter.Models.Repository.EFCore.Miner>
+﻿@using Microsoft.AspNetCore.Http;
+@model IEnumerable<CryptoMiningControlCenter.Models.Repository.EFCore.Miner>
 
 @{
     ViewData["Title"] = "矿机在线状态监控";
@@ -8,22 +9,20 @@
     <h1 class="display-4">矿机在线状态监控</h1>
 </div>
 
-
+<h3>欢迎你！ @Context.Session.GetString("username")</h3> 
+@*<a asp-controller="account" asp-action="logout">登出账号</a>*@
 
 <table class="table table-bordered row">
     <thead class="w-100">
         <tr class="row mx-0 bg-primary">
-            <th class="col-1">
+            <th class="col-2">
                 客户名
             </th>
-            <th class="col-1">
+            <th class="col-2">
                 机器型号
             </th>
             <th class="col-1">
                 场地
-            </th>
-            <th class="col-5">
-                观察者链接
             </th>
             <th class="col-1">
                 在线台数
@@ -32,9 +31,12 @@
                 离线台数
             </th>
             <th class="col-1">
+                无效台数
+            </th>
+            <th class="col-2">
                 15分钟算力
             </th>
-            <th class="col-1">
+            <th class="col-2">
                 24小时算力
             </th>
         </tr>
@@ -43,17 +45,14 @@
         @foreach (var item in Model)
         {
         <tr class="row mx-0">
-            <td class="col-1">
-                @Html.DisplayFor(modelItem => item.Username)
+            <td class="col-2">
+                <a href="@item.Link">@Html.DisplayFor(modelItem => item.Username)</a>     
             </td>
-            <td class="col-1">
+            <td class="col-2">
                 @Html.DisplayFor(modelItem => item.Minertype)
             </td>
             <td class="col-1">
                 @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td class="col-5" style="word-break:break-all; word-wrap:break-word;">
-                @Html.DisplayFor(modelItem => item.Link)
             </td>
             <td class="col-1">
                 @Html.DisplayFor(modelItem => item.Active)
@@ -62,9 +61,12 @@
                 @Html.DisplayFor(modelItem => item.Inactive)
             </td>
             <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Dead)
+            </td>
+            <td class="col-2">
                 @Html.DisplayFor(modelItem => item.Currentcalculation)
             </td>
-            <td class="col-1">
+            <td class="col-2">
                 @Html.DisplayFor(modelItem => item.Dailycalculation)
             </td>
         </tr>

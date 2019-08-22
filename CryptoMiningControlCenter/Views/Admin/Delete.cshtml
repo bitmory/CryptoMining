@@ -1,0 +1,86 @@
+﻿@model CryptoMiningControlCenter.Models.Repository.EFCore.Miner
+
+<h3>你确定删除?</h3>
+<div>
+    <hr />
+    <dl class="row table-bordered">
+        <dt class="col-sm-2">
+            客户名
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Username)
+        </dd>
+        <dt class="col-sm-2">
+            机器型号
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Minertype)
+        </dd>
+        <dt class="col-sm-2">
+            场地
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+        <dt class="col-sm-2">
+            观察者链接
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Link)
+        </dd>
+        <dt class="col-sm-2">
+            矿池类型
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Pooltype)
+        </dd>
+        <dt class="col-sm-2">
+            在线台数
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Active)
+        </dd>
+        <dt class="col-sm-2">
+            离线台数
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Inactive)
+        </dd>
+        <dt class="col-sm-2">
+            无效台数
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Dead)
+        </dd>
+        <dt class="col-sm-2">
+            15分钟算力
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Currentcalculation)
+        </dd>
+        <dt class="col-sm-2">
+            24小时算力
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Dailycalculation)
+        </dd>
+        <dt class="col-sm-2">
+            理论算力
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Standardcalculation)
+        </dd>
+        <dt class="col-sm-2">
+            算力单位
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Unit)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="确认删除" class="btn btn-danger" /> |
+        <a asp-action="Index">回到首页</a>
+    </form>
+</div>

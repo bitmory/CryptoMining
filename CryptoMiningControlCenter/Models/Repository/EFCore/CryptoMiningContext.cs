@@ -15,6 +15,7 @@ namespace CryptoMiningControlCenter.Models.Repository.EFCore
         {
         }
 
+        public virtual DbSet<Login> Login { get; set; }
         public virtual DbSet<Miner> Miner { get; set; }
         public virtual DbSet<Worker> Worker { get; set; }
 
@@ -23,13 +24,38 @@ namespace CryptoMiningControlCenter.Models.Repository.EFCore
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=212.64.64.36,8989;uid=admin_pro;pwd=cnkj123456!;database=CryptoMining;");
+                optionsBuilder.UseSqlServer("Server=212.64.64.36,8989;uid=mineradmin;pwd=miner123;database=CryptoMining;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+
+            modelBuilder.Entity<Login>(entity =>
+            {
+                entity.ToTable("login");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasColumnName("password")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Role)
+                    .IsRequired()
+                    .HasColumnName("role")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Username)
+                    .IsRequired()
+                    .HasColumnName("username")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
 
             modelBuilder.Entity<Miner>(entity =>
             {
@@ -39,13 +65,11 @@ namespace CryptoMiningControlCenter.Models.Repository.EFCore
 
                 entity.Property(e => e.Active).HasColumnName("active");
 
-                entity.Property(e => e.Currentcalculation)
-                    .HasColumnName("currentcalculation")
-                    .HasMaxLength(50);
+                entity.Property(e => e.Currentcalculation).HasColumnName("currentcalculation");
 
-                entity.Property(e => e.Dailycalculation)
-                    .HasColumnName("dailycalculation")
-                    .HasMaxLength(50);
+                entity.Property(e => e.Dailycalculation).HasColumnName("dailycalculation");
+
+                entity.Property(e => e.Dead).HasColumnName("dead");
 
                 entity.Property(e => e.Inactive).HasColumnName("inactive");
 
@@ -64,6 +88,16 @@ namespace CryptoMiningControlCenter.Models.Repository.EFCore
                 entity.Property(e => e.Pooltype)
                     .HasColumnName("pooltype")
                     .HasMaxLength(50);
+
+                entity.Property(e => e.Standardcalculation).HasColumnName("standardcalculation");
+
+                entity.Property(e => e.Unit)
+                    .HasColumnName("unit")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Updatedate)
+                    .HasColumnName("updatedate")
+                    .HasColumnType("datetime");
 
                 entity.Property(e => e.Username)
                     .HasColumnName("username")
