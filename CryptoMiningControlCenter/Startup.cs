@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using CryptoMiningControlCenter.Models.Repository.EFCore;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
 
 namespace CryptoMiningControlCenter
 {
@@ -33,6 +35,7 @@ namespace CryptoMiningControlCenter
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+
             services.AddSession();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             var connection = @"Server=212.64.64.36,8989;uid=mineradmin;pwd=miner123;database=CryptoMining;ConnectRetryCount=0";
@@ -54,10 +57,10 @@ namespace CryptoMiningControlCenter
             }
 
             app.UseSession();
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
 
             app.UseMvc(routes =>
             {
@@ -65,7 +68,7 @@ namespace CryptoMiningControlCenter
                     name: "default",
                     template: "{controller=Account}/{action=Index}/{id?}");
                     //template: "{controller=Home}/{action=Index}/{id?}");
-        });
+            });
         }
     }
 }

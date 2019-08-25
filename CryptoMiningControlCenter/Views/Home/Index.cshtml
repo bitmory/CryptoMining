@@ -15,11 +15,14 @@
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
-            选择场地位置: <select type="text" name="SearchString" value="@ViewData["currentFilter"]">
+            选择场地位置: <select id="locationfilter" type="text" name="SearchString" value="@ViewData["currentFilter"]" onchange="form.submit();" >
+                <option selected disabled hidden style='display: none' value=''></option>
                 <option value="普洱">普洱</option>
                 <option value="新马">新马</option>
+                <option value="普洱一期">普洱一期</option>
+                <option value="普洱二期">普洱二期</option>
             </select>
-            <input type="submit" value="确定" class="btn btn-default" />
+            @*<input type="submit" value="确定" class="btn btn-default" />*@
 
             <a asp-action="Index">返回所有列表</a>
         </p>
@@ -29,15 +32,16 @@
 <table class="table table-bordered row">
     <thead class="w-100">
         <tr class="row mx-0 bg-primary">
-            <th class="col-2">
+            <th class="col-1">
                 客户名
             </th>
-            <th class="col-2">
+            <th class="col-1">
                 机器型号
             </th>
             <th class="col-1">
                 场地
             </th>
+
             <th class="col-1">
                 在线台数
             </th>
@@ -46,6 +50,9 @@
             </th>
             <th class="col-1">
                 无效台数
+            </th>
+            <th class="col-1">
+                上机台数
             </th>
             <th class="col-1">
                 15分钟算力
@@ -57,6 +64,9 @@
                 平均算力
             </th>
             <th class="col-1">
+                理论算力
+            </th>
+            <th class="col-1">
                 数据达标率
             </th>
         </tr>
@@ -64,38 +74,57 @@
     <tbody class="w-100">
         @foreach (var item in Model)
         {
-            <tr class="row mx-0">
-                <td class="col-2">
-                    <a href="@item.Link">@Html.DisplayFor(modelItem => item.Username)</a>
-                </td>
-                <td class="col-2">
-                    @Html.DisplayFor(modelItem => item.Minertype)
-                </td>
-                <td class="col-1">
-                    @Html.DisplayFor(modelItem => item.Location)
-                </td>
-                <td class="col-1">
-                    @Html.DisplayFor(modelItem => item.Active)
-                </td>
-                <td class="col-1">
-                    @Html.DisplayFor(modelItem => item.Inactive)
-                </td>
-                <td class="col-1">
-                    @Html.DisplayFor(modelItem => item.Dead)
-                </td>
-                <td class="col-1">
-                    @Html.DisplayFor(modelItem => item.Currentcalculation)
-                </td>
-                <td class="col-1">
-                    @Html.DisplayFor(modelItem => item.Dailycalculation)
-                </td>
-                <td class="col-1">
-                    @(Convert.ToSingle(item.Currentcalculation / item.Active))
-                </td>
-                <td class="col-1">
-                    @(Convert.ToSingle((item.Currentcalculation / item.Active) / item.Standardcalculation))
-                </td>
-            </tr>
+        <tr class="row mx-0">
+            <td class="col-1">
+                <a href="@item.Link" target="_blank">@Html.DisplayFor(modelItem => item.Username)</a>
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Minertype)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Active)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Inactive)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Dead)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Currentcalculation) @Html.DisplayFor(modelItem => item.Unit)
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Dailycalculation)  @Html.DisplayFor(modelItem => item.Unit)
+            </td>
+            <td class="col-1">
+                @(Convert.ToSingle(item.Currentcalculation / item.Active))
+            </td>
+            <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Standardcalculation)  @Html.DisplayFor(modelItem => item.Unit)
+            </td>
+            <td class="col-1">
+                @(Convert.ToInt32((((item.Currentcalculation / item.Active)/ item.Standardcalculation) * 100))) %
+            </td>
+        </tr>
         }
     </tbody>
 </table>
+
+
+<script>
+    function DoPostBack()
+    {
+        var select = document.getElementById("locationfilter");
+        var option = select.options[select.selectedIndex];
+        if (option.value != "请选择") {
+            document.form1.action = "/Home/Index";
+            document.form1.submit();
+        }
+    }
+</script>

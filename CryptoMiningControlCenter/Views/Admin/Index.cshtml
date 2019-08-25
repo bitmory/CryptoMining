@@ -19,10 +19,13 @@
                 观察者链接
             </th>
             <th class="col-1">
+                上机台数
+            </th>
+            <th class="col-1">
                 理论算力
             </th>
-            <th class="col-3">
-                
+            <th class="col-2">
+
             </th>
         </tr>
     </thead>
@@ -42,9 +45,12 @@
                 @Html.DisplayFor(modelItem => item.Link)
             </td>
             <td class="col-1">
+                @Html.DisplayFor(modelItem => item.Total)
+            </td>
+            <td class="col-1">
                 @Html.DisplayFor(modelItem => item.Standardcalculation)
             </td>
-            <td class="col-3">
+            <td class="col-2">
                 <a asp-action="Edit" asp-route-id="@item.Id">编辑</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">详细</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">删除</a>

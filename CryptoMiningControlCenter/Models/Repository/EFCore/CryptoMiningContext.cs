@@ -91,6 +91,8 @@ namespace CryptoMiningControlCenter.Models.Repository.EFCore
 
                 entity.Property(e => e.Standardcalculation).HasColumnName("standardcalculation");
 
+                entity.Property(e => e.Total).HasColumnName("total");
+
                 entity.Property(e => e.Unit)
                     .HasColumnName("unit")
                     .HasMaxLength(50);

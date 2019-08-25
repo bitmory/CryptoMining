@@ -18,8 +18,8 @@ namespace CryptoMiningControlCenter.Controllers
             _context = context;
         }
 
-        //[Route("")]
-        [Route("index")]
+
+        [Route("Index")]
         [Route("~/")]
         public IActionResult Index()
         {

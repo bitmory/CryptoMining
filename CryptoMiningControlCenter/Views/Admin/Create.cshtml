@@ -26,6 +26,16 @@
                 <span asp-validation-for="Link" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Total" class="control-label">上机台数</label>
+                <input asp-for="Total" class="form-control" />
+                <span asp-validation-for="Total" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Unit" class="control-label">算力单位</label>
+                <input asp-for="Unit" class="form-control" />
+                <span asp-validation-for="Unit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Pooltype" class="control-label">矿池类型</label>
                 <select asp-for="Pooltype" class="form-control">
                     <option value="f2pool">f2pool</option>

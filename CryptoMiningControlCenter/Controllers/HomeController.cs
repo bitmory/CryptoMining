@@ -8,6 +8,7 @@ using CryptoMiningControlCenter.Models;
 using CryptoMiningControlCenter.Models.Repository.EFCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CryptoMiningControlCenter.Controllers
 {
@@ -24,7 +25,7 @@ namespace CryptoMiningControlCenter.Controllers
         public async Task<IActionResult> Index(string searchString)
         {
             var username = HttpContext.Session.GetString("username");
-            if(username == null)
+            if (username == null)
             {
                 return RedirectToAction("Index", "Account");
             }
@@ -34,15 +35,22 @@ namespace CryptoMiningControlCenter.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                miners = miners.Where(s => s.Location.Contains(searchString));
+                miners = miners.Where(s => s.Location.Equals(searchString));
             }
 
             return View(await miners.AsNoTracking().ToListAsync());
         }
 
-        //public IActionResult Index()
+
+        //public List<SelectListItem> Options { get; set; }
+        //public void OnGet()
         //{
-        //    return View();
+        //    Options = _context.Miner.Distinct().Select(a =>
+        //                                  new SelectListItem
+        //                                  {
+        //                                      Value = a.Location,
+        //                                      Text = a.Location
+        //                                  }).ToList();
         //}
 
         public IActionResult Privacy()
@@ -55,5 +63,7 @@ namespace CryptoMiningControlCenter.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
     }
 }

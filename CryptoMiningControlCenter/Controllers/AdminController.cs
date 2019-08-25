@@ -72,7 +72,7 @@ namespace CryptoMiningControlCenter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Username,Minertype,Location,Link,Pooltype,Active,Inactive,Dead,Currentcalculation,Dailycalculation,Standardcalculation,Unit,Updatedate")] Miner miner)
+        public async Task<IActionResult> Create([Bind("Id,Username,Minertype,Location,Link,Pooltype,Active,Total,Inactive,Dead,Currentcalculation,Dailycalculation,Standardcalculation,Unit,Updatedate")] Miner miner)
         {
             if (ModelState.IsValid)
             {
@@ -104,7 +104,7 @@ namespace CryptoMiningControlCenter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Username,Minertype,Location,Link,Pooltype,Active,Inactive,Dead,Currentcalculation,Dailycalculation,Standardcalculation,Unit,Updatedate")] Miner miner)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Username,Minertype,Location,Link,Pooltype,Active,Total,Inactive,Dead,Currentcalculation,Dailycalculation,Standardcalculation,Unit,Updatedate")] Miner miner)
         {
             if (id != miner.Id)
             {

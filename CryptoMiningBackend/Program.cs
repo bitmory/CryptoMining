@@ -199,8 +199,11 @@ namespace CryptoMiningBackend
             //var all = (int)json[0];
             var active = (int)json[1];
             var inactive = (int)json[2];
-            var dead = (int)json[3];
-
+            var dead = 0;
+            if (json.Count() == 4)
+            {
+                dead = (int)json[3];
+            }
 
             JToken json2 = jObject["currenthash"];
             JToken json3 = jObject["dailyhash"];
@@ -524,7 +527,7 @@ namespace CryptoMiningBackend
         public static void UpdateSummary(float currentcalculation, float dailycalculation, string unit, int active, int inactive,int dead, int poolid)
         {
             string date = DateTime.Now.ToString();
-            string query = "update miner set currentcalculation = '" + currentcalculation + "' , dailycalculation = '" + dailycalculation + "', unit = '"+ unit +"' , active = '" + active + "', inactive = '" + inactive + "', dead = '" + dead + "', updatedate = '" + date +"' where id = '" + poolid + "' ";
+            string query = "update miner set currentcalculation = '" + currentcalculation + "' , dailycalculation = '" + dailycalculation + "', active = '" + active + "', inactive = '" + inactive + "', dead = '" + dead + "', updatedate = '" + date +"' where id = '" + poolid + "' ";
             db.Execute(query);
             //string query = "update miner set currentcalculation = '" + worker.currentcalculation + "' , dailycalculation = '" + worker.dailycalculation + "' where id = '" + worker.poolid + "' ";
             //db.Execute(query);

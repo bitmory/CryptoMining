@@ -28,6 +28,16 @@
                 <span asp-validation-for="Link" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Total" class="control-label">上机台数</label>
+                <input asp-for="Total" class="form-control" />
+                <span asp-validation-for="Total" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Unit" class="control-label">算力单位</label>
+                <input asp-for="Unit" class="form-control" />
+                <span asp-validation-for="Unit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Pooltype" class="control-label">矿池类型</label>
                 <select asp-for="Pooltype" class="form-control">
                     <option value="f2pool">f2pool</option>
@@ -42,6 +52,38 @@
                 <label asp-for="Standardcalculation" class="control-label">理论算力</label>
                 <input asp-for="Standardcalculation" class="form-control" />
                 <span asp-validation-for="Standardcalculation" class="text-danger"></span>
+            </div>
+            <div style="display:none">
+                <div class="form-group">
+                    <label asp-for="Active" class="control-label">理论算力</label>
+                    <input asp-for="Active" class="form-control" />
+                    <span asp-validation-for="Active" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Inactive" class="control-label">理论算力</label>
+                    <input asp-for="Inactive" class="form-control" />
+                    <span asp-validation-for="Inactive" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Dead" class="control-label">理论算力</label>
+                    <input asp-for="Dead" class="form-control" />
+                    <span asp-validation-for="Dead" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Currentcalculation" class="control-label">理论算力</label>
+                    <input asp-for="Currentcalculation" class="form-control" />
+                    <span asp-validation-for="Currentcalculation" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Dailycalculation" class="control-label">理论算力</label>
+                    <input asp-for="Dailycalculation" class="form-control" />
+                    <span asp-validation-for="Dailycalculation" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Updatedate" class="control-label">理论算力</label>
+                    <input asp-for="Updatedate" class="form-control" />
+                    <span asp-validation-for="Updatedate" class="text-danger"></span>
+                </div>
             </div>
             <div class="form-group">
                 <input type="submit" value="保存" class="btn btn-primary" />

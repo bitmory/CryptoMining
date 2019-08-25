@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 
 namespace CryptoMiningControlCenter.Models.Repository.EFCore
@@ -12,6 +13,7 @@ namespace CryptoMiningControlCenter.Models.Repository.EFCore
         public string Link { get; set; }
         public string Pooltype { get; set; }
         public int? Active { get; set; }
+        public int? Total { get; set; }
         public int? Inactive { get; set; }
         public int? Dead { get; set; }
         public double? Currentcalculation { get; set; }
