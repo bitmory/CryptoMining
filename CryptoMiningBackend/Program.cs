@@ -31,9 +31,9 @@ namespace CryptoMiningBackend
         static void Main(string[] args)
         {
             //WorkerSummary1(1);
-            //WorkerSummary2(5);
+            //WorkerSummary2(44);
             //WorkerSummary3(7);
-            //WorkerSummary4(11);
+            //WorkerSummary4(14);
             //WorkerSummary5(25);
             //Worker2(5);
             //ProcessPool("f2pool");
@@ -179,224 +179,271 @@ namespace CryptoMiningBackend
 
         public static void WorkerSummary1(int poolid)
         {
-            var jsonConfig = File.ReadAllText(@"Json\\f2pool.json");
-            var config = StructuredDataConfig.ParseJsonString(jsonConfig);
-            string url = GetUrl(poolid);
-
             var driver = new ChromeDriver();
-            driver.Navigate().GoToUrl(url);
-
-            Thread.Sleep(1000);
-            var source = driver.PageSource;
-            driver.Close();
-            driver.Quit();
-            var openScraping = new StructuredDataExtractor(config);
-            var scrapingResults = openScraping.Extract(source);
-
-            JObject jObject = JObject.Parse(scrapingResults.ToString());
-            JToken json = jObject["data"];
-
-            //var all = (int)json[0];
-            var active = (int)json[1];
-            var inactive = (int)json[2];
-            var dead = 0;
-            if (json.Count() == 4)
+            try
             {
-                dead = (int)json[3];
+                var jsonConfig = File.ReadAllText(@"Json\\f2pool.json");
+                var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+                string url = GetUrl(poolid);
+                driver.Navigate().GoToUrl(url);
+
+                //Thread.Sleep(1000);
+                var source = driver.PageSource;
+                driver.Close();
+                driver.Quit();
+                var openScraping = new StructuredDataExtractor(config);
+                var scrapingResults = openScraping.Extract(source);
+
+                JObject jObject = JObject.Parse(scrapingResults.ToString());
+                JToken json = jObject["data"];
+
+                //var all = (int)json[0];
+                var active = (int)json[1];
+                var inactive = (int)json[2];
+                var dead = 0;
+                if (json.Count() == 4)
+                {
+                    dead = (int)json[3];
+                }
+
+                JToken json2 = jObject["currenthash"];
+                JToken json3 = jObject["dailyhash"];
+                var temp1 = (string)json2;
+                var temp2 = (string)json3;
+
+                var currentcalculation = GetFloat(temp1);
+                var dailycalculation = GetFloat(temp2);
+                var unit = GetString(temp1);
+
+                UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
             }
-
-            JToken json2 = jObject["currenthash"];
-            JToken json3 = jObject["dailyhash"];
-            var temp1 =  (string)json2;
-            var temp2 = (string)json3;
-
-            var currentcalculation = GetFloat(temp1);
-            var dailycalculation = GetFloat(temp2);
-            var unit = GetString(temp1);
-
-            UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive,dead, poolid);
+            catch(Exception ex)
+            {
+                driver.Close();
+                driver.Quit();
+                throw ex;
+            }
+            
         }
 
         public static void WorkerSummary2(int poolid)
         {
-            var jsonConfig = File.ReadAllText(@"Json\\poolin.json");
-            var config = StructuredDataConfig.ParseJsonString(jsonConfig);
-            string url = GetUrl(poolid);
-
             var driver = new ChromeDriver();
-            //driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(20);
-            driver.Navigate().GoToUrl(url);
-
-            Thread.Sleep(8000);
-            //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
-            //wait.Until(dr => dr.FindElement(By.XPath("//p[contains(@class, 'f-tac')]")));
-            var source = driver.PageSource;
-            driver.Close();
-            driver.Quit();
-            var openScraping = new StructuredDataExtractor(config);
-            var scrapingResults = openScraping.Extract(source);
-
-            //var jsonres = JsonConvert.DeserializeObject(scrapingResults.ToString());
-            JObject jObject = JObject.Parse(scrapingResults.ToString());
-            JToken json = jObject["data"];
-            var temp1 = (string)json[0];
-            var temp2 = (string)json[1];
-
-            var currentcalculation = GetFloat(temp1);
-            var dailycalculation = GetFloat(temp2);
-            var unit = GetString(temp1);
-
-            int active,inactive;
-            int dead = 0;
-            // no data for dead
-
-            if ((string)json[2] == "-")
+            try
             {
-                active = 0;
+                var jsonConfig = File.ReadAllText(@"Json\\poolin.json");
+                var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+                string url = GetUrl(poolid);
+
+                driver.Navigate().GoToUrl(url);
+
+                Thread.Sleep(6000);
+                //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                //wait.Until(dr => dr.FindElement(By.XPath("//p[contains(@class, 'f-tac')]")));
+                var source = driver.PageSource;
+                driver.Close();
+                driver.Quit();
+                var openScraping = new StructuredDataExtractor(config);
+                var scrapingResults = openScraping.Extract(source);
+
+                //var jsonres = JsonConvert.DeserializeObject(scrapingResults.ToString());
+                JObject jObject = JObject.Parse(scrapingResults.ToString());
+                JToken json = jObject["data"];
+                var temp1 = (string)json[0];
+                var temp2 = (string)json[1];
+
+                var currentcalculation = GetFloat(temp1);
+                var dailycalculation = GetFloat(temp2);
+                var unit = GetString(temp1);
+
+                int active, inactive;
+                int dead = 0;
+                // no data for dead
+
+                if ((string)json[2] == "-")
+                {
+                    active = 0;
+                }
+                else
+                {
+                    active = (int)json[2];
+                }
+
+                if ((string)json[3] == "-")
+                {
+                    inactive = 0;
+                }
+                else
+                {
+                    inactive = (int)json[3];
+                }
+
+                UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
             }
-            else
+            catch (Exception ex)
             {
-                active = (int)json[2];
+                driver.Close();
+                driver.Quit();
+                throw ex;
             }
 
-            if ((string)json[3] == "-")
-            {
-                inactive = 0;
-            }
-            else
-            {
-                inactive = (int)json[3];
-            }
-           
-            UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
         }
 
         public static void WorkerSummary3(int poolid)
         {
-            var jsonConfig = File.ReadAllText(@"Json\\poolbtc.json");
-            var config = StructuredDataConfig.ParseJsonString(jsonConfig);
-            string url = GetUrl(poolid);
-
             var driver = new ChromeDriver();
-            driver.Navigate().GoToUrl(url);
+            try
+            {
+                var jsonConfig = File.ReadAllText(@"Json\\poolbtc.json");
+                var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+                string url = GetUrl(poolid);
 
-            Thread.Sleep(1000);
-            var source = driver.PageSource;
-            driver.Close();
-            driver.Quit();
-            var openScraping = new StructuredDataExtractor(config);
-            var scrapingResults = openScraping.Extract(source);
+                driver.Navigate().GoToUrl(url);
 
-            JObject jObject = JObject.Parse(scrapingResults.ToString());
-            JToken json = jObject["calculation"];
-            var currentcalculationtemp = (string)json[0];
-            var temp1 = currentcalculationtemp.Replace(" ", "");
-            var dailycalculationtemp = (string)json[1];
-            var temp2 = dailycalculationtemp.Replace(" ", "");
+                //Thread.Sleep(1000);
+                var source = driver.PageSource;
+                driver.Close();
+                driver.Quit();
+                var openScraping = new StructuredDataExtractor(config);
+                var scrapingResults = openScraping.Extract(source);
 
-            var currentcalculation = GetFloat(temp1);
-            var dailycalculation = GetFloat(temp2);
-            var unit = GetString(temp1);
+                JObject jObject = JObject.Parse(scrapingResults.ToString());
+                JToken json = jObject["calculation"];
+                var currentcalculationtemp = (string)json[0];
+                var temp1 = currentcalculationtemp.Replace(" ", "");
+                var dailycalculationtemp = (string)json[1];
+                var temp2 = dailycalculationtemp.Replace(" ", "");
 
-            JToken json2 = jObject["status"];
-            var active = (int)json2[1];
-            var inactive = (int)json2[2];
-            int dead = 0;
+                var currentcalculation = GetFloat(temp1);
+                var dailycalculation = GetFloat(temp2);
+                var unit = GetString(temp1);
 
-            UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive,dead, poolid);
+                JToken json2 = jObject["status"];
+                var active = (int)json2[1];
+                var inactive = (int)json2[2];
+                int dead = 0;
+
+                UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
+            }
+            catch (Exception ex)
+            {
+                driver.Close();
+                driver.Quit();
+                throw ex;
+            } 
         }
 
         public static void WorkerSummary4(int poolid)
         {
-            var jsonConfig = File.ReadAllText(@"Json\\huobi.json");
-            var config = StructuredDataConfig.ParseJsonString(jsonConfig);
-            string url = GetUrl(poolid);
-
             var driver = new ChromeDriver();
-            driver.Navigate().GoToUrl(url);
-            Thread.Sleep(1000);
-            var source = driver.PageSource;
-            driver.Close();
-            driver.Quit();
-            var openScraping = new StructuredDataExtractor(config);
-            var scrapingResults = openScraping.Extract(source);
+            try
+            {
+                var jsonConfig = File.ReadAllText(@"Json\\huobi.json");
+                var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+                string url = GetUrl(poolid);
 
-            JObject jObject = JObject.Parse(scrapingResults.ToString());
-            JToken json = jObject["calculation"];
-            var temp1 = (string)json[0];
-            var temp2 = (string)json[2];
 
-            var currentcalculation = GetFloat(temp1);
-            var dailycalculation = GetFloat(temp2);
-            var unit = GetString(temp1);
+                driver.Navigate().GoToUrl(url);
+                Thread.Sleep(3000);
+                var source = driver.PageSource;
+                driver.Close();
+                driver.Quit();
+                var openScraping = new StructuredDataExtractor(config);
+                var scrapingResults = openScraping.Extract(source);
 
-            JToken json2 = jObject["status"];
+                JObject jObject = JObject.Parse(scrapingResults.ToString());
+                JToken json = jObject["calculation"];
+                var temp1 = (string)json[0];
+                var temp2 = (string)json[2];
 
-            var temp = (string)json2;
-            var numbers = Regex.Split(temp.Trim(), @"\D+");
+                var currentcalculation = GetFloat(temp1);
+                var dailycalculation = GetFloat(temp2);
+                var unit = GetString(temp1);
 
-            //bool flag = false;
-            //var list = new List<int>();
-            //string tmp = string.Empty;
-            //for(int i = 0; i < temp.Length; i++)
-            //{
-            //    if (Char.IsDigit(temp[i]))
-            //    {
-            //        tmp += temp[i];
-            //        flag = true;
-            //    }
-            //    else
-            //    {
-            //        if(flag == true)
-            //        {
-            //            flag = false;
-            //            list.Add(Int32.Parse(tmp));
-            //            tmp = string.Empty;
-            //        }
-            //    }
-            //}
+                JToken json2 = jObject["status"];
 
-            int active = Int32.Parse(numbers[1]);
-            int inactive = Int32.Parse(numbers[2]);
-            int dead = Int32.Parse(numbers[3]);
+                var temp = (string)json2;
+                var numbers = Regex.Split(temp.Trim(), @"\D+");
 
-            UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
+                //bool flag = false;
+                //var list = new List<int>();
+                //string tmp = string.Empty;
+                //for(int i = 0; i < temp.Length; i++)
+                //{
+                //    if (Char.IsDigit(temp[i]))
+                //    {
+                //        tmp += temp[i];
+                //        flag = true;
+                //    }
+                //    else
+                //    {
+                //        if(flag == true)
+                //        {
+                //            flag = false;
+                //            list.Add(Int32.Parse(tmp));
+                //            tmp = string.Empty;
+                //        }
+                //    }
+                //}
+
+                int active = Int32.Parse(numbers[1]);
+                int inactive = Int32.Parse(numbers[2]);
+                int dead = Int32.Parse(numbers[3]);
+
+                UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
+            }
+            catch (Exception ex)
+            {
+                driver.Close();
+                driver.Quit();
+                throw ex;
+            } 
         }
 
         public static void WorkerSummary5(int poolid)
         {
-            var jsonConfig = File.ReadAllText(@"Json\\antpool.json");
-            var config = StructuredDataConfig.ParseJsonString(jsonConfig);
-            string url = GetUrl(poolid);
 
             var driver = new ChromeDriver();
-            driver.Navigate().GoToUrl(url);
+            try
+            {
+                var jsonConfig = File.ReadAllText(@"Json\\antpool.json");
+                var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+                string url = GetUrl(poolid);
 
-            Thread.Sleep(1000);
-            var source = driver.PageSource;
-            driver.Close();
-            driver.Quit();
-            var openScraping = new StructuredDataExtractor(config);
-            var scrapingResults = openScraping.Extract(source);
+                driver.Navigate().GoToUrl(url);
 
-            JObject jObject = JObject.Parse(scrapingResults.ToString());
-            JToken json = jObject["data"];
+                //Thread.Sleep(1000);
+                var source = driver.PageSource;
+                driver.Close();
+                driver.Quit();
+                var openScraping = new StructuredDataExtractor(config);
+                var scrapingResults = openScraping.Extract(source);
 
-            var temp = (string)json[0];
-            var temp1 = (string)json[1];
-            var temp2 = (string)json[3];
+                JObject jObject = JObject.Parse(scrapingResults.ToString());
+                JToken json = jObject["data"];
 
-            var currentcalculation = GetFloat(temp1);
-            var dailycalculation = GetFloat(temp2);
-            var unit = GetString(temp1);
+                var temp = (string)json[0];
+                var temp1 = (string)json[1];
+                var temp2 = (string)json[3];
 
-            var numbers = Regex.Split(temp.Trim(), @"\D+");
-            var active = Int32.Parse(numbers[0]);
-            var total = Int32.Parse(numbers[1]);
-            var inactive = total - active;
-            int dead = 0;
+                var currentcalculation = GetFloat(temp1);
+                var dailycalculation = GetFloat(temp2);
+                var unit = GetString(temp1);
 
-            UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
+                var numbers = Regex.Split(temp.Trim(), @"\D+");
+                var active = Int32.Parse(numbers[0]);
+                var total = Int32.Parse(numbers[1]);
+                var inactive = total - active;
+                int dead = 0;
+
+                UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
+            }
+            catch (Exception ex)
+            {
+                driver.Close();
+                driver.Quit();
+                throw ex;
+            }    
         }
 
         public static void Worker2(int poolid)
@@ -544,6 +591,10 @@ namespace CryptoMiningBackend
         {
             string query = "SELECT link FROM miner where id = '" + poolid + "' ";
             var res = db.Query<string>(query).FirstOrDefault();
+            if (!res.StartsWith("http"))
+            {
+                res = "https://" + res;
+            }
             return res;
         }
 

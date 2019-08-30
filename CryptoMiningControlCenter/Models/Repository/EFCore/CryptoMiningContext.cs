@@ -17,6 +17,7 @@ namespace CryptoMiningControlCenter.Models.Repository.EFCore
 
         public virtual DbSet<Login> Login { get; set; }
         public virtual DbSet<Miner> Miner { get; set; }
+        public virtual DbSet<MinerLog> MinerLog { get; set; }
         public virtual DbSet<Worker> Worker { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -104,6 +105,36 @@ namespace CryptoMiningControlCenter.Models.Repository.EFCore
                 entity.Property(e => e.Username)
                     .HasColumnName("username")
                     .HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<MinerLog>(entity =>
+            {
+                entity.HasKey(e => e.LogId)
+                    .HasName("PK_MinerLog");
+
+                entity.ToTable("miner_log");
+
+                entity.Property(e => e.Link).HasMaxLength(300);
+
+                entity.Property(e => e.Location).HasMaxLength(100);
+
+                entity.Property(e => e.MinerType).HasMaxLength(100);
+
+                entity.Property(e => e.PoolType).HasMaxLength(50);
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Unit).HasMaxLength(50);
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UserName).HasMaxLength(100);
             });
 
             modelBuilder.Entity<Worker>(entity =>

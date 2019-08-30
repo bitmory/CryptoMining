@@ -22,23 +22,23 @@ namespace CryptoMiningControlCenter.Controllers
         }
 
         // GET: Workers
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString = null)
         {
-            var username = HttpContext.Session.GetString("username");
-            if (username == null)
-            {
-                return RedirectToAction("Index", "Account");
-            }
+            //var username = HttpContext.Session.GetString("username");
+            //if (username == null)
+            //{
+            //    return RedirectToAction("Index", "Account");
+            //}
 
-            var miners = from s in _context.Miner select s;
+            var miners = await _context.Miner.AsNoTracking().ToListAsync(); // from s in _context.Miner select s;
             ViewData["CurrentFilter"] = searchString;
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                miners = miners.Where(s => s.Location.Equals(searchString));
+                miners = miners.Where(s => s.Location.Equals(searchString)).ToList();
             }
 
-            return View(await miners.AsNoTracking().ToListAsync());
+            return View(miners);
         }
 
 

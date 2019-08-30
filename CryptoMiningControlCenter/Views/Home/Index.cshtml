@@ -41,7 +41,6 @@
             <th class="col-1">
                 场地
             </th>
-
             <th class="col-1">
                 在线台数
             </th>
@@ -103,28 +102,29 @@
                 @Html.DisplayFor(modelItem => item.Dailycalculation)  @Html.DisplayFor(modelItem => item.Unit)
             </td>
             <td class="col-1">
-                @(Convert.ToSingle(item.Currentcalculation / item.Active))
+                @String.Format("{0:0.00}", (item.Currentcalculation / item.Active)) @Html.DisplayFor(modelItem => item.Unit)
             </td>
             <td class="col-1">
                 @Html.DisplayFor(modelItem => item.Standardcalculation)  @Html.DisplayFor(modelItem => item.Unit)
             </td>
-            <td class="col-1">
-                @(Convert.ToInt32((((item.Currentcalculation / item.Active)/ item.Standardcalculation) * 100))) %
-            </td>
+            @if (item.Active == 0 || item.Standardcalculation == 0)
+            {
+                <td class="col-1" style="background-color:red"> 0 </td>
+            }
+            else if (((item.Currentcalculation * 100 / item.Active) / item.Standardcalculation) < 95)
+            {
+                <td class="col-1" style="background-color:yellow">
+                    @String.Format("{0:0.00}", ((item.Currentcalculation * 100 / item.Active) / item.Standardcalculation))   %
+                </td>
+            }
+            else
+            {
+                <td class="col-1" style="background-color:green">
+                    @String.Format("{0:0.00}", ((item.Currentcalculation * 100 / item.Active) / item.Standardcalculation))   %
+                </td>
+            }
         </tr>
         }
     </tbody>
 </table>
 
-
-<script>
-    function DoPostBack()
-    {
-        var select = document.getElementById("locationfilter");
-        var option = select.options[select.selectedIndex];
-        if (option.value != "请选择") {
-            document.form1.action = "/Home/Index";
-            document.form1.submit();
-        }
-    }
-</script>

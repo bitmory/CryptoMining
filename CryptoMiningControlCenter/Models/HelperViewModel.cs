@@ -18,7 +18,7 @@ namespace CryptoMiningControlCenter.Models
 
         public List<SelectListItem> Options { get; set; }
         public void OnGet()
-        {
+        {         
             Options = _context.Miner.Distinct().Select(a =>
                                           new SelectListItem
                                           {

@@ -47,6 +47,7 @@
                     <option value="antpool">antpool</option>
                 </select>
                 <span asp-validation-for="Pooltype" class="text-danger"></span>
+                <h3 class="text-danger">@ViewBag.error</h3>
             </div>
             <div class="form-group">
                 <label asp-for="Standardcalculation" class="control-label">理论算力</label>
@@ -55,32 +56,32 @@
             </div>
             <div style="display:none">
                 <div class="form-group">
-                    <label asp-for="Active" class="control-label">理论算力</label>
+                    <label asp-for="Active" class="control-label">活跃</label>
                     <input asp-for="Active" class="form-control" />
                     <span asp-validation-for="Active" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Inactive" class="control-label">理论算力</label>
+                    <label asp-for="Inactive" class="control-label">不活跃</label>
                     <input asp-for="Inactive" class="form-control" />
                     <span asp-validation-for="Inactive" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Dead" class="control-label">理论算力</label>
+                    <label asp-for="Dead" class="control-label">无效</label>
                     <input asp-for="Dead" class="form-control" />
                     <span asp-validation-for="Dead" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Currentcalculation" class="control-label">理论算力</label>
+                    <label asp-for="Currentcalculation" class="control-label">15分钟算力</label>
                     <input asp-for="Currentcalculation" class="form-control" />
                     <span asp-validation-for="Currentcalculation" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Dailycalculation" class="control-label">理论算力</label>
+                    <label asp-for="Dailycalculation" class="control-label">24小时算力</label>
                     <input asp-for="Dailycalculation" class="form-control" />
                     <span asp-validation-for="Dailycalculation" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Updatedate" class="control-label">理论算力</label>
+                    <label asp-for="Updatedate" class="control-label">更新时间</label>
                     <input asp-for="Updatedate" class="form-control" />
                     <span asp-validation-for="Updatedate" class="text-danger"></span>
                 </div>
