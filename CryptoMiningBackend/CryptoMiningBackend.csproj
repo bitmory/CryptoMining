@@ -60,7 +60,7 @@
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Dapper, Version=1.60.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -103,6 +103,7 @@
     <None Include="Json\huobi.json" />
     <None Include="Json\poolbtc.json" />
     <None Include="Json\poolin.json" />
+    <None Include="Json\viabtc.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

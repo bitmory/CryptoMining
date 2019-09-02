@@ -1,0 +1,7 @@
+{
+  "_removeNodes": [
+    "//script",
+    "//style"
+  ],
+  "data": "//div[contains(@class, 'stats-content')]//div[contains(@class, 'stats-item')]//span[contains(@class, 'large-num')]"
+}

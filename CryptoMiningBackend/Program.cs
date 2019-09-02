@@ -35,12 +35,14 @@ namespace CryptoMiningBackend
             //WorkerSummary3(7);
             //WorkerSummary4(14);
             //WorkerSummary5(25);
-            //Worker2(5);
+            //WorkerSummary6(1);
+
             //ProcessPool("f2pool");
             //ProcessPool("poolin");
             //ProcessPool("poolbtc");
             //ProcessPool("huobi");
             //ProcessPool("antpool");
+            //ProcessPool("viabtc");
             ProcessAll();
         }
 
@@ -83,6 +85,13 @@ namespace CryptoMiningBackend
                     WorkerSummary5(p);
                 }
             }
+            else if (pooltype == "viabtc")
+            {
+                foreach (var p in poollist)
+                {
+                    WorkerSummary6(p);
+                }
+            }
 
         }
 
@@ -93,6 +102,7 @@ namespace CryptoMiningBackend
             ProcessPool("poolbtc");
             ProcessPool("huobi");
             ProcessPool("antpool");
+            ProcessPool("viabtc");
         }
 
         public static void Worker1(int poolid)
@@ -446,6 +456,54 @@ namespace CryptoMiningBackend
             }    
         }
 
+
+        public static void WorkerSummary6(int poolid)
+        {
+
+            var driver = new ChromeDriver();
+            try
+            {
+                var jsonConfig = File.ReadAllText(@"Json\\viabtc.json");
+
+                var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+                string url = GetUrl(poolid);
+
+                //var url = "https://pool.viabtc.com/observer/dashboard?access_key=cb735a866859b626a748c0fb4a479394";
+                driver.Navigate().GoToUrl(url);
+
+                //Thread.Sleep(1000);
+                var source = driver.PageSource;
+                driver.Close();
+                driver.Quit();
+                var openScraping = new StructuredDataExtractor(config);
+                var scrapingResults = openScraping.Extract(source);
+
+                JObject jObject = JObject.Parse(scrapingResults.ToString());
+                JToken json = jObject["data"];
+
+   
+                var temp1 = (string)json[0];
+                var temp2 = (string)json[2];
+
+                var currentcalculation = GetFloat(temp1);
+                var dailycalculation = GetFloat(temp2);
+                var unit = GetString(temp1);
+
+                var active = Int32.Parse((string)json[3]);
+                var inactive = Int32.Parse((string)json[4]);
+                int total = 0;
+                int dead = 0;
+
+                UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
+            }
+            catch (Exception ex)
+            {
+                driver.Close();
+                driver.Quit();
+                throw ex;
+            }
+        }
+
         public static void Worker2(int poolid)
         {
 
@@ -586,6 +644,23 @@ namespace CryptoMiningBackend
             //string query2 = "update miner set inactive = '" + res1 + "' , active = '" + res2 + "' where id = '" + worker.poolid + "' ";
             //db.Execute(query2);
         }
+
+        public static void UpdateLog(float currentcalculation, float dailycalculation, string unit, int active, int inactive, int dead, int poolid)
+        {
+            string date = DateTime.Now.ToString();
+            string query = "update miner set currentcalculation = '" + currentcalculation + "' , dailycalculation = '" + dailycalculation + "', active = '" + active + "', inactive = '" + inactive + "', dead = '" + dead + "', updatedate = '" + date + "' where id = '" + poolid + "' ";
+            db.Execute(query);
+            //string query = "update miner set currentcalculation = '" + worker.currentcalculation + "' , dailycalculation = '" + worker.dailycalculation + "' where id = '" + worker.poolid + "' ";
+            //db.Execute(query);
+
+            //var sql1 = "SELECT COUNT(*) FROM worker where isactive = 'false' and poolid = '" + worker.poolid + "' ";
+            //var res1 = db.Query<int>(sql1).FirstOrDefault();
+            //var sql2 = "SELECT COUNT(*) FROM worker where isactive = 'true' and poolid = '" + worker.poolid + "' ";
+            //var res2 = db.Query<int>(sql2).FirstOrDefault();
+            //string query2 = "update miner set inactive = '" + res1 + "' , active = '" + res2 + "' where id = '" + worker.poolid + "' ";
+            //db.Execute(query2);
+        }
+
 
         public static string GetUrl(int poolid)
         {
