@@ -200,58 +200,68 @@ namespace CryptoMiningControlCenter.Controllers
             return false;
         }
 
-
+        [HttpPost]
         public void DownloadExcel()
-        {     
-            var data = _context.MinerLog.Where(x => x.UpdatedDate > DateTime.Now.AddDays(-90)).ToList();
-
-            ExcelPackage Ep = new ExcelPackage();
-            ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
-            Sheet.Cells["A1"].Value = "MinerId";
-            Sheet.Cells["B1"].Value = "客户名";
-            Sheet.Cells["C1"].Value = "机器型号";
-            Sheet.Cells["D1"].Value = "场地";
-            Sheet.Cells["E1"].Value = "观察者链接";
-            Sheet.Cells["F1"].Value = "在线台数";
-            Sheet.Cells["G1"].Value = "上机台数";
-            Sheet.Cells["H1"].Value = "离线台数";
-            Sheet.Cells["I1"].Value = "无效台数";
-            Sheet.Cells["J1"].Value = "15分钟算力";
-            Sheet.Cells["K1"].Value = "24小时算力";
-            Sheet.Cells["L1"].Value = "理论算力";
-            Sheet.Cells["M1"].Value = "算力单位";
-            Sheet.Cells["N1"].Value = "更新时间";
-
-            int row = 2;
-            foreach (var item in data)
+        {
+            string datetime = Request.Form["datepicker"];
+            DateTime dateValue;
+            if (DateTime.TryParse(datetime, out dateValue))
             {
+                var data = _context.MinerLog.Where(x => x.UpdatedDate > dateValue && x.UpdatedDate < dateValue.AddDays(1)).ToList();
+                
+                ExcelPackage Ep = new ExcelPackage();
+                ExcelWorksheet Sheet = Ep.Workbook.Worksheets.Add("Report");
+                Sheet.Cells["A1"].Value = "MinerId";
+                Sheet.Cells["B1"].Value = "客户名";
+                Sheet.Cells["C1"].Value = "机器型号";
+                Sheet.Cells["D1"].Value = "场地";
+                Sheet.Cells["E1"].Value = "观察者链接";
+                Sheet.Cells["F1"].Value = "在线台数";
+                Sheet.Cells["G1"].Value = "上机台数";
+                Sheet.Cells["H1"].Value = "离线台数";
+                Sheet.Cells["I1"].Value = "无效台数";
+                Sheet.Cells["J1"].Value = "15分钟算力";
+                Sheet.Cells["K1"].Value = "24小时算力";
+                Sheet.Cells["L1"].Value = "理论算力";
+                Sheet.Cells["M1"].Value = "算力单位";
+                Sheet.Cells["N1"].Value = "更新时间";
 
-                Sheet.Cells[string.Format("A{0}", row)].Value = item.MinerId;
-                Sheet.Cells[string.Format("B{0}", row)].Value = item.UserName;
-                Sheet.Cells[string.Format("C{0}", row)].Value = item.MinerType;
-                Sheet.Cells[string.Format("D{0}", row)].Value = item.Location;
-                Sheet.Cells[string.Format("E{0}", row)].Value = item.Link;
-                Sheet.Cells[string.Format("F{0}", row)].Value = item.Active;
-                Sheet.Cells[string.Format("G{0}", row)].Value = item.Total;
-                Sheet.Cells[string.Format("H{0}", row)].Value = item.Inactive;
-                Sheet.Cells[string.Format("I{0}", row)].Value = item.Dead;
-                Sheet.Cells[string.Format("J{0}", row)].Value = item.CurrentCalculation;
-                Sheet.Cells[string.Format("K{0}", row)].Value = item.DailyCalculation;
-                Sheet.Cells[string.Format("L{0}", row)].Value = item.StandardCalculation;
-                Sheet.Cells[string.Format("M{0}", row)].Value = item.Unit;
-                Sheet.Cells[string.Format("N{0}", row)].Value = item.UpdatedDate.ToString();
+                int row = 2;
+                foreach (var item in data)
+                {
 
-                row++;
-            }
+                    Sheet.Cells[string.Format("A{0}", row)].Value = item.MinerId;
+                    Sheet.Cells[string.Format("B{0}", row)].Value = item.UserName;
+                    Sheet.Cells[string.Format("C{0}", row)].Value = item.MinerType;
+                    Sheet.Cells[string.Format("D{0}", row)].Value = item.Location;
+                    Sheet.Cells[string.Format("E{0}", row)].Value = item.Link;
+                    Sheet.Cells[string.Format("F{0}", row)].Value = item.Active;
+                    Sheet.Cells[string.Format("G{0}", row)].Value = item.Total;
+                    Sheet.Cells[string.Format("H{0}", row)].Value = item.Inactive;
+                    Sheet.Cells[string.Format("I{0}", row)].Value = item.Dead;
+                    Sheet.Cells[string.Format("J{0}", row)].Value = item.CurrentCalculation;
+                    Sheet.Cells[string.Format("K{0}", row)].Value = item.DailyCalculation;
+                    Sheet.Cells[string.Format("L{0}", row)].Value = item.StandardCalculation;
+                    Sheet.Cells[string.Format("M{0}", row)].Value = item.Unit;
+                    Sheet.Cells[string.Format("N{0}", row)].Value = item.UpdatedDate.ToString();
+
+                    row++;
+                }
 
 
-            Sheet.Cells["A:AZ"].AutoFitColumns();
-            Response.Clear();
-            Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            Response.Headers.Add("content-disposition", "attachment: filename=" + "Report.xlsx");
-            Response.Body.WriteAsync(Ep.GetAsByteArray());
-            Response.StatusCode = StatusCodes.Status200OK;
+                Sheet.Cells["A:AZ"].AutoFitColumns();
+                Response.Clear();
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.Headers.Add("content-disposition", "attachment: filename=" + "Report.xlsx");
+                Response.Body.WriteAsync(Ep.GetAsByteArray());
+                //Response.StatusCode = StatusCodes.Status200OK;
+                RedirectToAction("Index","Admin");
+            }          
+            else
+            {
+                ViewBag.error = "日期格式错误";
+                RedirectToAction("Index", "Admin");
+            }        
         }
-
     }
 }

@@ -1,13 +1,39 @@
 ﻿@model IEnumerable<CryptoMiningControlCenter.Models.Repository.EFCore.Miner>
+@*<script src="~/js/jquery.min.js"></script>
+    <script src="~/js/jquery-ui.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#SelectedDate").datepicker({
+                showOn: 'button',
+                buttonImageOnly: true,
+                buttonImage: '/wwwroot/images/calendar.gif'
+            });
+        });
+    </script>
 
-<script src="~/Content/js/WdatePicker.js"></script>
+    <link href="~/css/jquery-ui.css" rel="Stylesheet" type="text/css" />*@
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+@*<link rel="stylesheet" href="/resources/demos/style.css">*@
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $(function () {
+        $("#datepicker").datepicker();
+    });
+</script>
+
 
 <div>
     <div>
         <div style="float:left"><a asp-action="Create">新添加场地观察者链接</a></div>
         <div style="float:right; margin-right:20px">
-            <input class="Wdate" type="text" onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss'})">
-            <input type="button" value="导出 Excel" onclick="location.href='@Url.Action("DownloadExcel","Admin")'" />
+            @using (Html.BeginForm("DownloadExcel", "Admin", FormMethod.Post))
+            {
+                <h1 class="text-danger">@ViewBag.error</h1>
+                <input type="text" id="datepicker" name="datepicker">
+                <input type="submit" value="导出 Excel" @*onclick="location.href='@Url.Action("DownloadExcel","Admin")'"*@ />
+            }
         </div>
     </div>
 
