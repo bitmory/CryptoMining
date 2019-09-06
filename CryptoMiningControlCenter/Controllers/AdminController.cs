@@ -201,7 +201,7 @@ namespace CryptoMiningControlCenter.Controllers
         }
 
         [HttpPost]
-        public void DownloadExcel()
+        public async Task<IActionResult> DownloadExcel()
         {
             string datetime = Request.Form["datepicker"];
             DateTime dateValue;
@@ -253,14 +253,14 @@ namespace CryptoMiningControlCenter.Controllers
                 Response.Clear();
                 Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 Response.Headers.Add("content-disposition", "attachment: filename=" + "Report.xlsx");
-                Response.Body.WriteAsync(Ep.GetAsByteArray());
+                await Response.Body.WriteAsync(Ep.GetAsByteArray());
                 //Response.StatusCode = StatusCodes.Status200OK;
-                RedirectToAction("Index","Admin");
+                return RedirectToAction("Index","Admin");
             }          
             else
             {
                 ViewBag.error = "日期格式错误";
-                RedirectToAction("Index", "Admin");
+                return View("Index", await _context.Miner.ToListAsync());
             }        
         }
     }
