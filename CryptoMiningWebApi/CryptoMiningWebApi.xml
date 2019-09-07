@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CryptoMiningWebApi</name>
+    </assembly>
+    <members>
+        <member name="M:CryptoMiningWebApi.Controllers.AuthController.Authenticate(CryptoMiningWebApi.Models.Repository.DTO.TokenLogin)">
+            <summary>
+            Token User Login
+            </summary>
+            <returns></returns>
+            
+        </member>
+        <member name="M:CryptoMiningWebApi.Controllers.MinerController.GetMiningPool(System.String)">
+            <summary>
+            根据位置得到所有用户的所有矿池情况
+            
+            </summary>
+            <param name="location"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
