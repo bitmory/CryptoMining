@@ -1,1 +1,1 @@
-﻿Scaffold-DbContext "Server=212.64.64.36,8989;uid=mineradmin;pwd=miner123;database=CryptoMining;" Microsoft.EntityFrameworkCore.SqlServer -f -OutputDir Models/Repository/EFCore -Tables dbo.worker,dbo.miner,dbo.login,dbo.miner_log
+﻿Scaffold-DbContext "Server=212.64.64.36,8989;uid=mineradmin;pwd=miner123;database=CryptoMining;" Microsoft.EntityFrameworkCore.SqlServer -f -OutputDir Models/Repository/EFCore -Tables dbo.worker,dbo.miner,dbo.login,dbo.miner_log, dbo.pooltype

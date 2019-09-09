@@ -18,6 +18,7 @@ namespace CryptoMiningWebApi.Models.Repository.EFCore
         public virtual DbSet<Login> Login { get; set; }
         public virtual DbSet<Miner> Miner { get; set; }
         public virtual DbSet<MinerLog> MinerLog { get; set; }
+        public virtual DbSet<Pooltype> Pooltype { get; set; }
         public virtual DbSet<Worker> Worker { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -135,6 +136,18 @@ namespace CryptoMiningWebApi.Models.Repository.EFCore
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.UserName).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<Pooltype>(entity =>
+            {
+                entity.ToTable("pooltype");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Type)
+                    .IsRequired()
+                    .HasColumnName("type")
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<Worker>(entity =>

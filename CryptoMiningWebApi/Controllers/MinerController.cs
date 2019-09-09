@@ -25,7 +25,7 @@ namespace CryptoMiningWebApi.Controllers
 
         /// <summary>
         /// 根据位置得到所有用户的所有矿池情况
-        /// 
+        /// 不输入位置得到所有list
         /// </summary>
         /// <param name="location"></param>
         /// <returns></returns>
@@ -42,8 +42,104 @@ namespace CryptoMiningWebApi.Controllers
                 throw ex;
             }
         }
-           
 
+        /// <summary>
+        /// 添加矿池矿池情况
+        /// 
+        /// </summary>
+        /// <param name="minerview"></param>
+        /// <returns></returns>
+        [Route("MiningPool/Add")]
+        [HttpPost]
+        public async Task<bool> AddMiningPool(MinerView minerview)
+        {
+            try
+            {
+                return await _minerservice.AddMiningPool(minerview);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// 编辑矿池矿池情况
+        /// 
+        /// </summary>
+        /// <param name="poolid"></param>
+        /// <param name="minerview"></param>
+        /// <returns></returns>
+        [Route("MiningPool/Edit")]
+        [HttpPost]
+        public async Task<bool> ModifyMiningPool(int poolid, MinerView minerview)
+        {
+            try
+            {
+                return await _minerservice.ModifyMiningPool(poolid, minerview);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// 编辑矿池矿池情况
+        /// 
+        /// </summary>
+        /// <param name="poolid"></param>
+        /// <returns></returns>
+        [Route("MiningPool/Delete")]
+        [HttpPost]
+        public async Task<bool> DeleteMiningPool(int poolid)
+        {
+            try
+            {
+                return await _minerservice.DeleteMiningPool(poolid);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        /// <summary>
+        /// 得到矿池类型列表
+        /// </summary>
+        /// <returns></returns>
+        [Route("PoolType")]
+        [HttpGet]
+        public async Task<List<string>> GetPoolTypeList()
+        {
+            try
+            {
+                return await _minerservice.GetPoolTypeList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// 得到矿池类型列表
+        /// </summary>
+        /// <returns></returns>
+        [Route("Location")]
+        [HttpGet]
+        public async Task<List<string>> GetLocationList()
+        {
+            try
+            {
+                return await _minerservice.GetLocationList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
     }
 }
