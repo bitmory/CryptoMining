@@ -30,7 +30,7 @@ namespace CryptoMiningBackend
         static IDbConnection db = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlServerConnString"].ConnectionString);
         static void Main(string[] args)
         {
-            //WorkerSummary1(1);
+            WorkerSummary1(1);
             //WorkerSummary2(44);
             //WorkerSummary3(7);
             //WorkerSummary4(14);
@@ -46,6 +46,15 @@ namespace CryptoMiningBackend
             ProcessAll();
         }
 
+        public static class Commonflag
+        {
+            public static bool flag1 = true;
+            public static bool flag2 = true;
+            public static bool flag3 = true;
+            public static bool flag4 = true;
+            public static bool flag5 = true;
+            public static bool flag6 = true;
+        }
 
         public static void ProcessPool(string pooltype)
         {
@@ -190,17 +199,19 @@ namespace CryptoMiningBackend
         public static void WorkerSummary1(int poolid)
         {
             var driver = new ChromeDriver();
+            
+            var jsonConfig = File.ReadAllText(@"Json\\f2pool.json");
+            var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+            string url = GetUrl(poolid);
+            url = "https://baidu.com";
+            driver.Navigate().GoToUrl(url);
+
+            //Thread.Sleep(1000);
+            var source = driver.PageSource;
+            driver.Close();
+            driver.Quit();
             try
             {
-                var jsonConfig = File.ReadAllText(@"Json\\f2pool.json");
-                var config = StructuredDataConfig.ParseJsonString(jsonConfig);
-                string url = GetUrl(poolid);
-                driver.Navigate().GoToUrl(url);
-
-                //Thread.Sleep(1000);
-                var source = driver.PageSource;
-                driver.Close();
-                driver.Quit();
                 var openScraping = new StructuredDataExtractor(config);
                 var scrapingResults = openScraping.Extract(source);
 
@@ -229,9 +240,16 @@ namespace CryptoMiningBackend
             }
             catch(Exception ex)
             {
-                driver.Close();
-                driver.Quit();
-                throw ex;
+                if (Commonflag.flag1 != true)
+                {
+                    // do nothing 
+                }
+                else
+                {
+                    string error = ex.ToString();
+                    Commonflag.flag1 = false;
+                    UpdateErrorLog("f2pool", error);
+                }
             }
             
         }
@@ -239,20 +257,21 @@ namespace CryptoMiningBackend
         public static void WorkerSummary2(int poolid)
         {
             var driver = new ChromeDriver();
+
+            var jsonConfig = File.ReadAllText(@"Json\\poolin.json");
+            var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+            string url = GetUrl(poolid);
+
+            driver.Navigate().GoToUrl(url);
+
+            Thread.Sleep(6000);
+            //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+            //wait.Until(dr => dr.FindElement(By.XPath("//p[contains(@class, 'f-tac')]")));
+            var source = driver.PageSource;
+            driver.Close();
+            driver.Quit();
             try
             {
-                var jsonConfig = File.ReadAllText(@"Json\\poolin.json");
-                var config = StructuredDataConfig.ParseJsonString(jsonConfig);
-                string url = GetUrl(poolid);
-
-                driver.Navigate().GoToUrl(url);
-
-                Thread.Sleep(6000);
-                //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
-                //wait.Until(dr => dr.FindElement(By.XPath("//p[contains(@class, 'f-tac')]")));
-                var source = driver.PageSource;
-                driver.Close();
-                driver.Quit();
                 var openScraping = new StructuredDataExtractor(config);
                 var scrapingResults = openScraping.Extract(source);
 
@@ -292,9 +311,16 @@ namespace CryptoMiningBackend
             }
             catch (Exception ex)
             {
-                driver.Close();
-                driver.Quit();
-                throw ex;
+                if (Commonflag.flag1 != true)
+                {
+                    // do nothing 
+                }
+                else
+                {
+                    string error = ex.ToString();
+                    Commonflag.flag1 = false;
+                    UpdateErrorLog("poolin", error);
+                }
             }
 
         }
@@ -302,23 +328,24 @@ namespace CryptoMiningBackend
         public static void WorkerSummary3(int poolid)
         {
             var driver = new ChromeDriver();
+
+            var jsonConfig = File.ReadAllText(@"Json\\poolbtc.json");
+            var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+            string url = GetUrl(poolid);
+
+            driver.Navigate().GoToUrl(url);
+
+            Thread.Sleep(3000);
+            var source = driver.PageSource;
+            driver.Close();
+            driver.Quit();
             try
             {
-                var jsonConfig = File.ReadAllText(@"Json\\poolbtc.json");
-                var config = StructuredDataConfig.ParseJsonString(jsonConfig);
-                string url = GetUrl(poolid);
-
-                driver.Navigate().GoToUrl(url);
-
-                //Thread.Sleep(1000);
-                var source = driver.PageSource;
-                driver.Close();
-                driver.Quit();
                 var openScraping = new StructuredDataExtractor(config);
                 var scrapingResults = openScraping.Extract(source);
 
                 JObject jObject = JObject.Parse(scrapingResults.ToString());
-                JToken json = jObject["calculation"];
+                JToken json = jObject["data"];
                 var currentcalculationtemp = (string)json[0];
                 var temp1 = currentcalculationtemp.Replace(" ", "");
                 var dailycalculationtemp = (string)json[1];
@@ -328,36 +355,43 @@ namespace CryptoMiningBackend
                 var dailycalculation = GetFloat(temp2);
                 var unit = GetString(temp1);
 
-                JToken json2 = jObject["status"];
-                var active = (int)json2[1];
-                var inactive = (int)json2[2];
+                var active = (int)json[2];
+                var inactive = (int)json[3];
                 int dead = 0;
 
                 UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
             }
             catch (Exception ex)
             {
-                driver.Close();
-                driver.Quit();
-                throw ex;
+                if (Commonflag.flag1 != true)
+                {
+                    // do nothing 
+                }
+                else
+                {
+                    string error = ex.ToString();
+                    Commonflag.flag1 = false;
+                    UpdateErrorLog("poolbtc", error);
+                }
             } 
         }
 
         public static void WorkerSummary4(int poolid)
         {
             var driver = new ChromeDriver();
+
+            var jsonConfig = File.ReadAllText(@"Json\\huobi.json");
+            var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+            string url = GetUrl(poolid);
+
+
+            driver.Navigate().GoToUrl(url);
+            Thread.Sleep(3000);
+            var source = driver.PageSource;
+            driver.Close();
+            driver.Quit();
             try
             {
-                var jsonConfig = File.ReadAllText(@"Json\\huobi.json");
-                var config = StructuredDataConfig.ParseJsonString(jsonConfig);
-                string url = GetUrl(poolid);
-
-
-                driver.Navigate().GoToUrl(url);
-                Thread.Sleep(3000);
-                var source = driver.PageSource;
-                driver.Close();
-                driver.Quit();
                 var openScraping = new StructuredDataExtractor(config);
                 var scrapingResults = openScraping.Extract(source);
 
@@ -404,9 +438,16 @@ namespace CryptoMiningBackend
             }
             catch (Exception ex)
             {
-                driver.Close();
-                driver.Quit();
-                throw ex;
+                if (Commonflag.flag1 != true)
+                {
+                    // do nothing 
+                }
+                else
+                {
+                    string error = ex.ToString();
+                    Commonflag.flag1 = false;
+                    UpdateErrorLog("huobi", error);
+                }
             } 
         }
 
@@ -414,18 +455,18 @@ namespace CryptoMiningBackend
         {
 
             var driver = new ChromeDriver();
+            var jsonConfig = File.ReadAllText(@"Json\\antpool.json");
+            var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+            string url = GetUrl(poolid);
+
+            driver.Navigate().GoToUrl(url);
+
+            //Thread.Sleep(1000);
+            var source = driver.PageSource;
+            driver.Close();
+            driver.Quit();
             try
             {
-                var jsonConfig = File.ReadAllText(@"Json\\antpool.json");
-                var config = StructuredDataConfig.ParseJsonString(jsonConfig);
-                string url = GetUrl(poolid);
-
-                driver.Navigate().GoToUrl(url);
-
-                //Thread.Sleep(1000);
-                var source = driver.PageSource;
-                driver.Close();
-                driver.Quit();
                 var openScraping = new StructuredDataExtractor(config);
                 var scrapingResults = openScraping.Extract(source);
 
@@ -450,9 +491,16 @@ namespace CryptoMiningBackend
             }
             catch (Exception ex)
             {
-                driver.Close();
-                driver.Quit();
-                throw ex;
+                if (Commonflag.flag1 != true)
+                {
+                    // do nothing 
+                }
+                else
+                {
+                    string error = ex.ToString();
+                    Commonflag.flag1 = false;
+                    UpdateErrorLog("antpool", error);
+                }
             }    
         }
 
@@ -461,20 +509,21 @@ namespace CryptoMiningBackend
         {
 
             var driver = new ChromeDriver();
+
+            var jsonConfig = File.ReadAllText(@"Json\\viabtc.json");
+
+            var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+            string url = GetUrl(poolid);
+
+            //var url = "https://pool.viabtc.com/observer/dashboard?access_key=cb735a866859b626a748c0fb4a479394";
+            driver.Navigate().GoToUrl(url);
+
+            //Thread.Sleep(1000);
+            var source = driver.PageSource;
+            driver.Close();
+            driver.Quit();
             try
             {
-                var jsonConfig = File.ReadAllText(@"Json\\viabtc.json");
-
-                var config = StructuredDataConfig.ParseJsonString(jsonConfig);
-                string url = GetUrl(poolid);
-
-                //var url = "https://pool.viabtc.com/observer/dashboard?access_key=cb735a866859b626a748c0fb4a479394";
-                driver.Navigate().GoToUrl(url);
-
-                //Thread.Sleep(1000);
-                var source = driver.PageSource;
-                driver.Close();
-                driver.Quit();
                 var openScraping = new StructuredDataExtractor(config);
                 var scrapingResults = openScraping.Extract(source);
 
@@ -498,15 +547,21 @@ namespace CryptoMiningBackend
             }
             catch (Exception ex)
             {
-                driver.Close();
-                driver.Quit();
-                throw ex;
+                if (Commonflag.flag1 != true)
+                {
+                    // do nothing 
+                }
+                else
+                {
+                    string error = ex.ToString();
+                    Commonflag.flag1 = false;
+                    UpdateErrorLog("viabtc", error);
+                }
             }
         }
 
         public static void Worker2(int poolid)
         {
-
             var jsonConfig = File.ReadAllText(@"Json\\poolin.json");
             var config = StructuredDataConfig.ParseJsonString(jsonConfig);
             string html;
@@ -633,6 +688,23 @@ namespace CryptoMiningBackend
         {
             string date = DateTime.Now.ToString();
             string query = "update miner set currentcalculation = '" + currentcalculation + "' , dailycalculation = '" + dailycalculation + "', active = '" + active + "', inactive = '" + inactive + "', dead = '" + dead + "', updatedate = '" + date +"' where id = '" + poolid + "' ";
+            db.Execute(query);
+            //string query = "update miner set currentcalculation = '" + worker.currentcalculation + "' , dailycalculation = '" + worker.dailycalculation + "' where id = '" + worker.poolid + "' ";
+            //db.Execute(query);
+
+            //var sql1 = "SELECT COUNT(*) FROM worker where isactive = 'false' and poolid = '" + worker.poolid + "' ";
+            //var res1 = db.Query<int>(sql1).FirstOrDefault();
+            //var sql2 = "SELECT COUNT(*) FROM worker where isactive = 'true' and poolid = '" + worker.poolid + "' ";
+            //var res2 = db.Query<int>(sql2).FirstOrDefault();
+            //string query2 = "update miner set inactive = '" + res1 + "' , active = '" + res2 + "' where id = '" + worker.poolid + "' ";
+            //db.Execute(query2);
+        }
+
+        public static void UpdateErrorLog(string pooltype, string errormessage)
+        {
+            string date = DateTime.Now.ToString();
+            bool flag = false;
+            string query = "update miner_error set pooltype = '" + pooltype + "' , errormessage = '" + errormessage + "', updatedate = '" + date + "', isresolve = '" + flag + "' where pooltype = '" + pooltype + "' ";
             db.Execute(query);
             //string query = "update miner set currentcalculation = '" + worker.currentcalculation + "' , dailycalculation = '" + worker.dailycalculation + "' where id = '" + worker.poolid + "' ";
             //db.Execute(query);

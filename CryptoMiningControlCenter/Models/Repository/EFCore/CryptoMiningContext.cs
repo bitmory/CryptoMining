@@ -17,6 +17,7 @@ namespace CryptoMiningControlCenter.Models.Repository.EFCore
 
         public virtual DbSet<Login> Login { get; set; }
         public virtual DbSet<Miner> Miner { get; set; }
+        public virtual DbSet<MinerError> MinerError { get; set; }
         public virtual DbSet<MinerLog> MinerLog { get; set; }
         public virtual DbSet<Worker> Worker { get; set; }
 
@@ -105,6 +106,27 @@ namespace CryptoMiningControlCenter.Models.Repository.EFCore
                 entity.Property(e => e.Username)
                     .HasColumnName("username")
                     .HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<MinerError>(entity =>
+            {
+                entity.ToTable("miner_error");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Errormessage)
+                    .HasColumnName("errormessage")
+                    .HasMaxLength(1000);
+
+                entity.Property(e => e.Isresolve).HasColumnName("isresolve");
+
+                entity.Property(e => e.Pooltype)
+                    .HasColumnName("pooltype")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Updatedate)
+                    .HasColumnName("updatedate")
+                    .HasColumnType("datetime");
             });
 
             modelBuilder.Entity<MinerLog>(entity =>

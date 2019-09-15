@@ -38,6 +38,19 @@ namespace CryptoMiningControlCenter.Controllers
                 miners = miners.Where(s => s.Location.Equals(searchString)).ToList();
             }
 
+            var minererror = await _context.MinerError.Where(x => x.Isresolve == false).ToListAsync();
+            var errormessage = "";
+            if (minererror != null)
+            {
+                errormessage += "错误提醒：以下矿池再爬虫程序运行中出现错误：";
+                foreach (var me in minererror)
+                {
+                    errormessage += me.Pooltype + " ";
+                }
+            }
+
+            ViewBag.Error = errormessage;
+
             return View(miners);
         }
 
