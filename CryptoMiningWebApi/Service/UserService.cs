@@ -29,7 +29,7 @@ namespace CryptoMiningWebApi.Service
 
         private List<TokenUser> _users = new List<TokenUser>
         {
-            new TokenUser { Id = 1, Username  = "admin",  Password = "123456", Role = Role.Admin }
+            new TokenUser { Id = 1, Username  = "mineradmin",  Password = "miner123456", Role = Role.Admin }
             //new TokenUser { Id = 2, Username  = "user123", Password = "user123", Role = Role.Admin  }
         };
 
@@ -70,7 +70,7 @@ namespace CryptoMiningWebApi.Service
             var user = _dbcontext.Login.Where(x => x.Username == username && x.Password == password).FirstOrDefault();
             if (user != null)
             {
-                res.isValid = 1;
+                res.isValid = true;
                 if(user.Role == "admin")
                 {
                     res.role = "admin";
@@ -82,7 +82,7 @@ namespace CryptoMiningWebApi.Service
             }
             else
             {
-                res.isValid = 0;
+                res.isValid = false;
             }
 
             return res;

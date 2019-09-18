@@ -30,7 +30,7 @@ namespace CryptoMiningBackend
         static IDbConnection db = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlServerConnString"].ConnectionString);
         static void Main(string[] args)
         {
-            WorkerSummary1(1);
+            //WorkerSummary1(1);
             //WorkerSummary2(44);
             //WorkerSummary3(7);
             //WorkerSummary4(14);
@@ -203,7 +203,6 @@ namespace CryptoMiningBackend
             var jsonConfig = File.ReadAllText(@"Json\\f2pool.json");
             var config = StructuredDataConfig.ParseJsonString(jsonConfig);
             string url = GetUrl(poolid);
-            url = "https://baidu.com";
             driver.Navigate().GoToUrl(url);
 
             //Thread.Sleep(1000);
@@ -311,14 +310,14 @@ namespace CryptoMiningBackend
             }
             catch (Exception ex)
             {
-                if (Commonflag.flag1 != true)
+                if (Commonflag.flag2 != true)
                 {
                     // do nothing 
                 }
                 else
                 {
                     string error = ex.ToString();
-                    Commonflag.flag1 = false;
+                    Commonflag.flag2 = false;
                     UpdateErrorLog("poolin", error);
                 }
             }
@@ -363,14 +362,14 @@ namespace CryptoMiningBackend
             }
             catch (Exception ex)
             {
-                if (Commonflag.flag1 != true)
+                if (Commonflag.flag3 != true)
                 {
                     // do nothing 
                 }
                 else
                 {
                     string error = ex.ToString();
-                    Commonflag.flag1 = false;
+                    Commonflag.flag3 = false;
                     UpdateErrorLog("poolbtc", error);
                 }
             } 
@@ -438,14 +437,14 @@ namespace CryptoMiningBackend
             }
             catch (Exception ex)
             {
-                if (Commonflag.flag1 != true)
+                if (Commonflag.flag4 != true)
                 {
                     // do nothing 
                 }
                 else
                 {
                     string error = ex.ToString();
-                    Commonflag.flag1 = false;
+                    Commonflag.flag4 = false;
                     UpdateErrorLog("huobi", error);
                 }
             } 
@@ -491,14 +490,14 @@ namespace CryptoMiningBackend
             }
             catch (Exception ex)
             {
-                if (Commonflag.flag1 != true)
+                if (Commonflag.flag5 != true)
                 {
                     // do nothing 
                 }
                 else
                 {
                     string error = ex.ToString();
-                    Commonflag.flag1 = false;
+                    Commonflag.flag5 = false;
                     UpdateErrorLog("antpool", error);
                 }
             }    
@@ -547,14 +546,14 @@ namespace CryptoMiningBackend
             }
             catch (Exception ex)
             {
-                if (Commonflag.flag1 != true)
+                if (Commonflag.flag6 != true)
                 {
                     // do nothing 
                 }
                 else
                 {
                     string error = ex.ToString();
-                    Commonflag.flag1 = false;
+                    Commonflag.flag6 = false;
                     UpdateErrorLog("viabtc", error);
                 }
             }

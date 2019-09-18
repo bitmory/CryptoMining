@@ -14,6 +14,7 @@ namespace CryptoMiningWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MinerController : ControllerBase
     {
         private readonly MinerService _minerservice;
@@ -124,7 +125,7 @@ namespace CryptoMiningWebApi.Controllers
         }
 
         /// <summary>
-        /// 得到矿池类型列表
+        /// 得到矿池地点列表
         /// </summary>
         /// <returns></returns>
         [Route("Location")]
@@ -134,6 +135,25 @@ namespace CryptoMiningWebApi.Controllers
             try
             {
                 return await _minerservice.GetLocationList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
+        /// <summary>
+        /// 暂时没有数据，input 任意id
+        /// </summary>
+        /// <returns></returns>
+        [Route("worker")]
+        [HttpGet]
+        public async Task<WorkerDetail> GetWorkerDetail(int workerid)
+        {
+            try
+            {
+                return await _minerservice.GetWorkerDetail(workerid);
             }
             catch (Exception ex)
             {

@@ -95,6 +95,7 @@ namespace CryptoMiningWebApi.Service
                 miner.Pooltype = minerview.Pooltype;
                 miner.Standardcalculation = minerview.Standardcalculation;
                 miner.Updatedate = DateTime.Now;
+                _dbcontext.Entry(miner).State = EntityState.Modified;
                 await _dbcontext.SaveChangesAsync();
                 return true;
             }
@@ -135,6 +136,14 @@ namespace CryptoMiningWebApi.Service
             var locations = await _dbcontext.Miner.Select(x => x.Location).Distinct().ToListAsync();
             return locations;
         }
+
+        public async Task<WorkerDetail> GetWorkerDetail(int workerid)
+        {
+            var res = new WorkerDetail();
+            return res;
+        }
+
+
 
         private bool CheckPoolType(string url, string pooltype)
         {
