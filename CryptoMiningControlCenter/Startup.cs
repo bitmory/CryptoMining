@@ -38,7 +38,8 @@ namespace CryptoMiningControlCenter
 
             services.AddSession();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            var connection = @"Server=212.64.64.36,8989;uid=mineradmin;pwd=miner123;database=CryptoMining;ConnectRetryCount=0";
+            // 49.235.96.228,8989
+            var connection = @"Server=172.17.128.2;uid=mineradmin;pwd=miner123;database=CryptoMining;ConnectRetryCount=0";
             services.AddDbContext<CryptoMiningContext>(options => options.UseSqlServer(connection));
         }
 

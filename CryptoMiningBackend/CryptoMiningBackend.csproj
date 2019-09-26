@@ -75,7 +75,9 @@
     <Reference Include="OpenScraping, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\OpenScraping.1.4.2\lib\netstandard2.0\OpenScraping.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />

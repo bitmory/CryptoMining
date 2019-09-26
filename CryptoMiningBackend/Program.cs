@@ -205,10 +205,8 @@ namespace CryptoMiningBackend
             string url = GetUrl(poolid);
             driver.Navigate().GoToUrl(url);
 
-            //Thread.Sleep(1000);
+            Thread.Sleep(1000);
             var source = driver.PageSource;
-            driver.Close();
-            driver.Quit();
             try
             {
                 var openScraping = new StructuredDataExtractor(config);
@@ -250,6 +248,11 @@ namespace CryptoMiningBackend
                     UpdateErrorLog("f2pool", error);
                 }
             }
+            finally
+            {
+                driver.Close();
+                driver.Quit();
+            }
             
         }
 
@@ -267,8 +270,6 @@ namespace CryptoMiningBackend
             //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
             //wait.Until(dr => dr.FindElement(By.XPath("//p[contains(@class, 'f-tac')]")));
             var source = driver.PageSource;
-            driver.Close();
-            driver.Quit();
             try
             {
                 var openScraping = new StructuredDataExtractor(config);
@@ -321,6 +322,11 @@ namespace CryptoMiningBackend
                     UpdateErrorLog("poolin", error);
                 }
             }
+            finally
+            {
+                driver.Close();
+                driver.Quit();
+            }
 
         }
 
@@ -334,10 +340,8 @@ namespace CryptoMiningBackend
 
             driver.Navigate().GoToUrl(url);
 
-            Thread.Sleep(3000);
+            Thread.Sleep(5000);
             var source = driver.PageSource;
-            driver.Close();
-            driver.Quit();
             try
             {
                 var openScraping = new StructuredDataExtractor(config);
@@ -372,7 +376,12 @@ namespace CryptoMiningBackend
                     Commonflag.flag3 = false;
                     UpdateErrorLog("poolbtc", error);
                 }
-            } 
+            }
+            finally
+            {
+                driver.Close();
+                driver.Quit();
+            }
         }
 
         public static void WorkerSummary4(int poolid)
@@ -387,8 +396,6 @@ namespace CryptoMiningBackend
             driver.Navigate().GoToUrl(url);
             Thread.Sleep(3000);
             var source = driver.PageSource;
-            driver.Close();
-            driver.Quit();
             try
             {
                 var openScraping = new StructuredDataExtractor(config);
@@ -447,7 +454,12 @@ namespace CryptoMiningBackend
                     Commonflag.flag4 = false;
                     UpdateErrorLog("huobi", error);
                 }
-            } 
+            }
+            finally
+            {
+                driver.Close();
+                driver.Quit();
+            }
         }
 
         public static void WorkerSummary5(int poolid)
@@ -460,10 +472,8 @@ namespace CryptoMiningBackend
 
             driver.Navigate().GoToUrl(url);
 
-            //Thread.Sleep(1000);
+            Thread.Sleep(1000);
             var source = driver.PageSource;
-            driver.Close();
-            driver.Quit();
             try
             {
                 var openScraping = new StructuredDataExtractor(config);
@@ -500,7 +510,12 @@ namespace CryptoMiningBackend
                     Commonflag.flag5 = false;
                     UpdateErrorLog("antpool", error);
                 }
-            }    
+            }
+            finally
+            {
+                driver.Close();
+                driver.Quit();
+            }
         }
 
 
@@ -519,8 +534,6 @@ namespace CryptoMiningBackend
 
             //Thread.Sleep(1000);
             var source = driver.PageSource;
-            driver.Close();
-            driver.Quit();
             try
             {
                 var openScraping = new StructuredDataExtractor(config);
@@ -556,6 +569,11 @@ namespace CryptoMiningBackend
                     Commonflag.flag6 = false;
                     UpdateErrorLog("viabtc", error);
                 }
+            }
+            finally
+            {
+                driver.Close();
+                driver.Quit();
             }
         }
 
