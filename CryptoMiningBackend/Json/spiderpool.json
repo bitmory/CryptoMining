@@ -1,0 +1,7 @@
+{
+  "_removeNodes": [
+    "//script",
+    "//style"
+  ],
+  "data": "//div[contains(@class, 'YPTlm04')]//ul//p"
+}

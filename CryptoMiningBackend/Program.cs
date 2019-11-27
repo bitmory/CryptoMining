@@ -35,7 +35,7 @@ namespace CryptoMiningBackend
             //WorkerSummary3(7);
             //WorkerSummary4(14);
             //WorkerSummary5(25);
-            //WorkerSummary6(1);
+            //WorkerSummary7(1);
 
             //ProcessPool("f2pool");
             //ProcessPool("poolin");
@@ -54,6 +54,7 @@ namespace CryptoMiningBackend
             public static bool flag4 = true;
             public static bool flag5 = true;
             public static bool flag6 = true;
+            public static bool flag7 = true;
         }
 
         public static void ProcessPool(string pooltype)
@@ -101,6 +102,13 @@ namespace CryptoMiningBackend
                     WorkerSummary6(p);
                 }
             }
+            else if (pooltype == "spiderpool")
+            {
+                foreach (var p in poollist)
+                {
+                    WorkerSummary7(p);
+                }
+            }
 
         }
 
@@ -112,6 +120,7 @@ namespace CryptoMiningBackend
             ProcessPool("huobi");
             ProcessPool("antpool");
             ProcessPool("viabtc");
+            ProcessPool("spiderpool");
         }
 
         public static void Worker1(int poolid)
@@ -205,7 +214,7 @@ namespace CryptoMiningBackend
             string url = GetUrl(poolid);
             driver.Navigate().GoToUrl(url);
 
-            Thread.Sleep(1000);
+            Thread.Sleep(8000);
             var source = driver.PageSource;
             try
             {
@@ -243,7 +252,7 @@ namespace CryptoMiningBackend
                 }
                 else
                 {
-                    string error = ex.ToString();
+                    string error = "Poolid=" + poolid + "  " + ex.ToString();
                     Commonflag.flag1 = false;
                     UpdateErrorLog("f2pool", error);
                 }
@@ -266,7 +275,7 @@ namespace CryptoMiningBackend
 
             driver.Navigate().GoToUrl(url);
 
-            Thread.Sleep(6000);
+            Thread.Sleep(15000);
             //WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
             //wait.Until(dr => dr.FindElement(By.XPath("//p[contains(@class, 'f-tac')]")));
             var source = driver.PageSource;
@@ -317,7 +326,7 @@ namespace CryptoMiningBackend
                 }
                 else
                 {
-                    string error = ex.ToString();
+                    string error = "Poolid=" + poolid + "  " + ex.ToString();
                     Commonflag.flag2 = false;
                     UpdateErrorLog("poolin", error);
                 }
@@ -340,7 +349,7 @@ namespace CryptoMiningBackend
 
             driver.Navigate().GoToUrl(url);
 
-            Thread.Sleep(5000);
+            Thread.Sleep(10000);
             var source = driver.PageSource;
             try
             {
@@ -372,7 +381,7 @@ namespace CryptoMiningBackend
                 }
                 else
                 {
-                    string error = ex.ToString();
+                    string error = "Poolid=" + poolid + "  " + ex.ToString();
                     Commonflag.flag3 = false;
                     UpdateErrorLog("poolbtc", error);
                 }
@@ -394,7 +403,7 @@ namespace CryptoMiningBackend
 
 
             driver.Navigate().GoToUrl(url);
-            Thread.Sleep(3000);
+            Thread.Sleep(5000);
             var source = driver.PageSource;
             try
             {
@@ -450,7 +459,7 @@ namespace CryptoMiningBackend
                 }
                 else
                 {
-                    string error = ex.ToString();
+                    string error = "Poolid=" + poolid + "  "+ ex.ToString();
                     Commonflag.flag4 = false;
                     UpdateErrorLog("huobi", error);
                 }
@@ -506,7 +515,7 @@ namespace CryptoMiningBackend
                 }
                 else
                 {
-                    string error = ex.ToString();
+                    string error = "Poolid=" + poolid + "  " + ex.ToString();
                     Commonflag.flag5 = false;
                     UpdateErrorLog("antpool", error);
                 }
@@ -565,8 +574,68 @@ namespace CryptoMiningBackend
                 }
                 else
                 {
-                    string error = ex.ToString();
+                    string error = "Poolid=" + poolid + "  " + ex.ToString();
                     Commonflag.flag6 = false;
+                    UpdateErrorLog("viabtc", error);
+                }
+            }
+            finally
+            {
+                driver.Close();
+                driver.Quit();
+            }
+        }
+
+
+        public static void WorkerSummary7(int poolid)
+        {
+
+            var driver = new ChromeDriver();
+
+            var jsonConfig = File.ReadAllText(@"Json\\spiderpool.json");
+
+            var config = StructuredDataConfig.ParseJsonString(jsonConfig);
+            string url = GetUrl(poolid);
+
+            //var url = "https://www.spiderpool.com/coin/show/btc/yibobtc01/detail.html";
+            driver.Navigate().GoToUrl(url);
+
+            Thread.Sleep(1000);
+            var source = driver.PageSource;
+            try
+            {
+                var openScraping = new StructuredDataExtractor(config);
+                var scrapingResults = openScraping.Extract(source);
+
+                JObject jObject = JObject.Parse(scrapingResults.ToString());
+                JToken json = jObject["data"];
+
+
+                var temp1 = (string)json[8];
+                var temp2 = (string)json[10];
+
+                var currentcalculation = GetFloat(temp1);
+                var dailycalculation = GetFloat(temp2);
+                var unit = GetString(temp1);
+
+                var temp = (string)json[6];
+                var active = Int32.Parse(temp.Substring(0, temp.IndexOf('/')));
+                var total = Int32.Parse(temp.Substring(temp.LastIndexOf('/') + 1));
+                int inactive = total - active;
+                int dead = 0;
+
+                UpdateSummary(currentcalculation, dailycalculation, unit, active, inactive, dead, poolid);
+            }
+            catch (Exception ex)
+            {
+                if (Commonflag.flag7 != true)
+                {
+                    // do nothing 
+                }
+                else
+                {
+                    string error = "Poolid=" + poolid + "  " + ex.ToString();
+                    Commonflag.flag7 = false;
                     UpdateErrorLog("viabtc", error);
                 }
             }
