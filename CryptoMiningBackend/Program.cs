@@ -30,7 +30,7 @@ namespace CryptoMiningBackend
         static IDbConnection db = new SqlConnection(ConfigurationManager.ConnectionStrings["SqlServerConnString"].ConnectionString);
         static void Main(string[] args)
         {
-            //WorkerSummary1(1);
+            WorkerSummary1(1);
             //WorkerSummary2(44);
             //WorkerSummary3(7);
             //WorkerSummary4(14);
@@ -43,7 +43,7 @@ namespace CryptoMiningBackend
             //ProcessPool("huobi");
             //ProcessPool("antpool");
             //ProcessPool("viabtc");
-            ProcessAll();
+            //ProcessAll();
         }
 
         public static class Commonflag

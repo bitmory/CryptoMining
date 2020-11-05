@@ -26,7 +26,7 @@ namespace CryptoMiningControlCenter.Models.Repository.EFCore
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=212.64.64.36,8989;uid=mineradmin;pwd=miner123;database=CryptoMining;");
+                optionsBuilder.UseSqlServer("Server=207.46.151.207;uid=chengduadmin;pwd=chengdu123456!;database=CryptoMining;");
             }
         }
 
